@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lịch sử 12 - Bài 4: ASEAN từ 5 đến 10</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- QRCode.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+            min-height: 100vh;
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body class="text-slate-100 font-sans flex flex-col justify-between p-4 md:p-8">
+
+    <!-- HEADER SECTION -->
+    <header class="max-w-4xl mx-auto w-full text-center my-4">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-blue-900/60 border border-blue-500/30 rounded-full text-xs font-semibold text-amber-400 mb-3 uppercase tracking-widest">
+            <i class="fa-solid fa-graduation-cap"></i> SGK Lịch Sử 12 • Kết Nối Tri Thức
+        </div>
+        <h1 class="text-2xl md:text-4xl font-extrabold text-amber-400 tracking-tight leading-tight uppercase">
+            Cổng Học Tập Tương Tác: Lịch Sử ASEAN
+        </h1>
+        <p class="text-xs md:text-base text-slate-300 mt-2 max-w-2xl mx-auto">
+            Bài 4: Sự ra đời và phát triển của Hiệp hội các quốc gia Đông Nam Á (ASEAN)
+        </p>
+    </header>
+
+    <!-- MAIN ACCESS CARD WITH QR CODE -->
+    <main class="max-w-3xl mx-auto w-full glass-card rounded-3xl p-6 md:p-10 shadow-2xl my-auto text-center border border-amber-500/20">
+        <div class="space-y-6">
+            <div>
+                <h2 class="text-lg md:text-xl font-bold text-white uppercase tracking-wide">
+                    Quét Mã QR Để Vào Học Trực Tuyến
+                </h2>
+                <p class="text-xs md:text-sm text-slate-400 mt-1">
+                    Học sinh sử dụng Điện thoại/Máy tính bảng quét mã bên dưới để tham gia bài học tương tác 12 trạm.
+                </p>
+            </div>
+
+            <!-- QR CODE DISPLAY CONTAINER -->
+            <div class="flex justify-center my-4">
+                <div class="p-4 bg-white rounded-2xl shadow-xl border-4 border-amber-400 inline-block">
+                    <div id="qrcode" class="flex justify-center items-center"></div>
+                </div>
+            </div>
+
+            <!-- LINK INPUT & DIRECT ACCESS BUTTON -->
+            <div class="space-y-3 max-w-lg mx-auto">
+                <div class="flex flex-col sm:flex-row gap-2">
+                    <input type="text" id="target-url" value="bai4lop12.html" class="flex-1 bg-slate-900/90 text-amber-300 border border-slate-700 rounded-xl px-4 py-2.5 text-xs md:text-sm focus:border-amber-400 focus:outline-none text-center sm:text-left font-mono" placeholder="Nhập liên kết bài học...">
+                    <button onclick="updateQRCode()" class="px-5 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-xl text-xs md:text-sm transition flex items-center justify-center gap-2 shadow">
+                        <i class="fa-solid fa-sync"></i> Cập Nhật Mã
+                    </button>
+                </div>
+
+                <a id="direct-link" href="bai4lop12.html" target="_blank" class="w-full inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold rounded-xl text-xs md:text-sm shadow-lg shadow-blue-500/25 transition">
+                    <span>VÀO BÀI HỌC TRỰC TIẾP</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <!-- CLASSROOM INSTRUCTIONS -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-left pt-4 border-t border-slate-700/60 text-xs">
+                <div class="bg-slate-800/50 p-3 rounded-xl border border-slate-700/50">
+                    <div class="text-amber-400 font-bold mb-1 flex items-center gap-1.5">
+                        <i class="fa-solid fa-qrcode"></i> Bước 1:
+                    </div>
+                    <span class="text-slate-300">Quét mã QR bằng ứng dụng Camera hoặc Zalo.</span>
+                </div>
+                <div class="bg-slate-800/50 p-3 rounded-xl border border-slate-700/50">
+                    <div class="text-amber-400 font-bold mb-1 flex items-center gap-1.5">
+                        <i class="fa-solid fa-gamepad"></i> Bước 2:
+                    </div>
+                    <span class="text-slate-300">Khám phá 12 trạm tương tác, Flipbook 3D & Bản đồ số.</span>
+                </div>
+                <div class="bg-slate-800/50 p-3 rounded-xl border border-slate-700/50">
+                    <div class="text-amber-400 font-bold mb-1 flex items-center gap-1.5">
+                        <i class="fa-solid fa-trophy"></i> Bước 3:
+                    </div>
+                    <span class="text-slate-300">Hoàn thành thử thách & thu thập đủ 10 Huy hiệu ASEAN.</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="max-w-4xl mx-auto w-full text-center my-4 text-slate-500 text-xs">
+        © Thiết kế dành cho tiết học tương tác Lịch sử 12 • Bài 4: ASEAN từ ASEAN 5 đến ASEAN 10
+    </footer>
+
+    <!-- QR GENERATOR SCRIPT -->
+    <script>
+        let qrCodeInstance = null;
+
+        function generateQR(url) {
+            const qrContainer = document.getElementById("qrcode");
+            qrContainer.innerHTML = "";
+            qrCodeInstance = new QRCode(qrContainer, {
+                text: url,
+                width: 200,
+                height: 200,
+                colorDark: "#0f172a",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+        }
+
+        function updateQRCode() {
+            let inputUrl = document.getElementById("target-url").value.trim();
+            if (!inputUrl) {
+                inputUrl = "bai4lop12.html";
+                document.getElementById("target-url").value = inputUrl;
+            }
+            document.getElementById("direct-link").href = inputUrl;
+            generateQR(inputUrl);
+        }
+
+        // Initialize QR Code on page load
+        window.addEventListener("DOMContentLoaded", () => {
+            const initialUrl = window.location.href.replace(/index\.html$/, "") + "bai4lop12.html";
+            document.getElementById("target-url").value = initialUrl;
+            document.getElementById("direct-link").href = initialUrl;
+            generateQR(initialUrl);
+        });
+    </script>
+</body>
+</html>
