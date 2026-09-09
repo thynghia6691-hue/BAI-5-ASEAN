@@ -181,7 +181,6 @@
         <!-- SCREEN 0: BRIDGE & WELCOME SCREEN -->
         <section id="screen-welcome" class="space-y-6">
             <div class="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-xl relative overflow-hidden">
-                <!-- Background decorative elements -->
                 <div class="absolute -right-16 -bottom-16 w-80 h-80 bg-red-100 rounded-full blur-3xl opacity-60 pointer-events-none"></div>
                 <div class="absolute -left-16 -top-16 w-80 h-80 bg-blue-100 rounded-full blur-3xl opacity-60 pointer-events-none"></div>
 
@@ -226,8 +225,8 @@
             </div>
         </section>
 
+        <!-- SCREEN 1: COMMAND CENTER -->
         <section id="screen-command-center" class="hidden space-y-8">
-            <!-- Header Banner inside Dashboard -->
             <div class="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white rounded-3xl p-6 sm:p-8 shadow-xl relative overflow-hidden">
                 <div class="absolute right-0 top-0 bottom-0 w-1/3 opacity-10 flex items-center justify-center pointer-events-none">
                     <i class="fa-solid fa-globe text-9xl"></i>
@@ -437,7 +436,7 @@
                         </div>
                         <div>
                             <span class="text-[10px] font-bold text-yellow-400 uppercase tracking-widest block">HỌC TẬP TƯƠNG TÁC THPT</span>
-                            <h3 class="text-base sm:text-lg font-black text-white leading-none">THẺ QR BÀI HỌC & ĐẠI SỨ ASEAN</h3>
+                            <h3 class="text-base sm:text-lg font-black text-white leading-none">TẠO MÃ QR BÀI HỌC & THẺ ĐẠI SỨ</h3>
                         </div>
                     </div>
                     <button onclick="closeQRModal()" class="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition">
@@ -449,28 +448,75 @@
                 <div class="p-6 space-y-6 overflow-y-auto max-h-[80vh]">
                     
                     <!-- URL Input Box -->
-                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-3">
+                    <div class="bg-slate-50 p-4 sm:p-5 rounded-2xl border border-slate-200 space-y-3">
                         <label class="block text-xs font-bold text-slate-800 uppercase tracking-wider">
-                            <i class="fa-solid fa-link text-asean-red mr-1"></i> Liên kết kết nối bài học (Tùy chỉnh nếu cần):
+                            <i class="fa-solid fa-link text-asean-red mr-1"></i> Nhập địa chỉ trang Web công khai để tạo Mã QR:
                         </label>
-                        <div class="flex gap-2">
-                            <input id="qr-url-input" type="text" class="flex-grow text-xs p-3 rounded-xl border border-slate-300 focus:outline-none focus:border-asean-red font-mono" placeholder="Nhập đường dẫn trang web hoặc liên kết bài học...">
-                            <button onclick="updateQRCode()" class="bg-asean-red hover:bg-asean-darkRed text-white text-xs font-extrabold px-4 py-3 rounded-xl transition shrink-0">
-                                Tạo Mã QR
+                        
+                        <div class="flex flex-col sm:flex-row gap-2">
+                            <input id="qr-url-input" type="text" oninput="validateAndPreviewQR()" class="flex-grow text-xs p-3 rounded-xl border border-slate-300 focus:outline-none focus:border-asean-red font-mono" placeholder="https://ten-trang-web-cua-ban.vercel.app">
+                            <button onclick="updateQRCode()" class="bg-asean-red hover:bg-asean-darkRed text-white text-xs font-extrabold px-5 py-3 rounded-xl transition shrink-0 flex items-center justify-center space-x-1">
+                                <i class="fa-solid fa-arrows-rotate"></i>
+                                <span>Tạo Lại Mã QR</span>
                             </button>
                         </div>
-                        <div id="qr-preview-warning" class="hidden p-3 rounded-xl bg-amber-50 border border-amber-300 text-amber-900 text-xs space-y-1">
+
+                        <!-- LIVE VALIDATION STATUS -->
+                        <div id="qr-preview-warning" class="hidden p-3.5 rounded-xl bg-amber-50 border border-amber-300 text-amber-900 text-xs space-y-2">
                             <p class="font-bold flex items-center text-amber-900">
-                                <i class="fa-solid fa-triangle-exclamation text-amber-600 mr-1.5 text-sm"></i>
-                                Bạn đang ở chế độ Xem thử (Preview / Nội bộ)
+                                <i class="fa-solid fa-triangle-exclamation text-amber-600 mr-2 text-base"></i>
+                                LỖI: BẠN ĐANG DÙNG LINK XEM THỬ / NỘI BỘ (ĐIỆN THOẠI KHÔNG QUÉT ĐƯỢC)
                             </p>
                             <p class="text-[11px] text-amber-800 leading-relaxed">
-                                Điện thoại không quét vào được vì địa chỉ hiện tại là link nội bộ tạm thời. Để điện thoại mở được ngay: Hãy <strong>dán link Web thực tế</strong> (như Vercel/Netlify) hoặc <strong>link Google Form, Padlet</strong> bài học vào ô trên rồi bấm "Tạo Mã QR".
+                                Link hiện tại có dạng <strong>file://, blob: hoặc localhost</strong>. Đây là link nội bộ chỉ chạy trên máy tính bạn đang mở. Khi quét bằng điện thoại sẽ báo lỗi không vào được!
                             </p>
+                            <div class="pt-1 flex flex-wrap gap-2">
+                                <button onclick="toggleHelpAccordion()" class="bg-amber-600 hover:bg-amber-700 text-white font-bold text-[11px] px-3 py-1.5 rounded-lg transition flex items-center space-x-1">
+                                    <i class="fa-solid fa-circle-question"></i>
+                                    <span>Xem cách đưa Web lên mạng miễn phí (30 giây)</span>
+                                </button>
+                                <button onclick="setSampleUrl('padlet')" class="bg-white hover:bg-slate-100 text-slate-800 border border-amber-400 font-bold text-[11px] px-3 py-1.5 rounded-lg transition">
+                                    Dán ví dụ: Link Padlet
+                                </button>
+                                <button onclick="setSampleUrl('forms')" class="bg-white hover:bg-slate-100 text-slate-800 border border-amber-400 font-bold text-[11px] px-3 py-1.5 rounded-lg transition">
+                                    Dán ví dụ: Link Google Forms
+                                </button>
+                            </div>
                         </div>
-                        <p class="text-[11px] text-slate-500">
-                            💡 Mẹo cho học sinh: Bạn có thể dán link Google Form nộp bài, link Padlet thảo luận nhóm hoặc link bài giảng này để chia sẻ cho cả lớp cùng quét!
-                        </p>
+
+                        <div id="qr-preview-success" class="hidden p-3 rounded-xl bg-emerald-50 border border-emerald-300 text-emerald-900 text-xs flex items-center space-x-2">
+                            <i class="fa-solid fa-circle-check text-emerald-600 text-base"></i>
+                            <span><strong>Đường dẫn hợp lệ!</strong> Mã QR bên dưới đã sẵn sàng để điện thoại quét truy cập.</span>
+                        </div>
+
+                        <!-- EXPANDABLE HOSTING GUIDE -->
+                        <div id="hosting-help-accordion" class="hidden p-4 rounded-2xl bg-slate-900 text-slate-200 text-xs space-y-3">
+                            <div class="flex items-center justify-between border-b border-slate-700 pb-2">
+                                <h4 class="font-extrabold text-yellow-300 flex items-center space-x-2">
+                                    <i class="fa-solid fa-rocket"></i>
+                                    <span>3 CÁCH ĐƯA TỆP HTML LÊN MẠNG ĐỂ QUÉT QR MỌI ĐIỆN THOẠI</span>
+                                </h4>
+                                <button onclick="toggleHelpAccordion()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+                            </div>
+
+                            <div class="space-y-2">
+                                <div class="bg-slate-800 p-3 rounded-xl border border-slate-700">
+                                    <span class="font-bold text-emerald-400">Cách 1: Dùng Tiiny.host (Nhanh nhất - 15 giây)</span>
+                                    <p class="text-[11px] text-slate-300 mt-1">1. Vào trang <strong class="text-white">tiiny.host</strong> trên trình duyệt.<br>2. Kéo thả tệp <code>index.html</code> này vào ô upload.<br>3. Bấm "Publish", bạn sẽ nhận được 1 link web dạng <code>https://...tiiny.site</code>. Copy link đó dán vào ô trên!</p>
+                                </div>
+
+                                <div class="bg-slate-800 p-3 rounded-xl border border-slate-700">
+                                    <span class="font-bold text-blue-400">Cách 2: Dùng Netlify Drop (Chuyên nghiệp)</span>
+                                    <p class="text-[11px] text-slate-300 mt-1">Vào trang <strong class="text-white">app.netlify.com/drop</strong> ➔ Kéo thả thư mục chứa file HTML vào ➔ Nhận đường dẫn Web chính thức miễn phí vĩnh viễn.</p>
+                                </div>
+
+                                <div class="bg-slate-800 p-3 rounded-xl border border-slate-700">
+                                    <span class="font-bold text-yellow-300">Cách 3: Tạo mã QR cho Padlet hoặc Google Form của lớp</span>
+                                    <p class="text-[11px] text-slate-300 mt-1">Nếu Giáo viên/Học sinh dùng Padlet nộp bài hoặc Google Form kiểm tra, hãy dán trực tiếp link Google Form/Padlet vào ô trên để tạo thẻ QR lớp học.</p>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
 
                     <!-- PRINTABLE POSTER CARD CONTAINER -->
@@ -481,7 +527,7 @@
                             <div class="absolute -right-12 -top-12 w-40 h-40 bg-yellow-400/10 rounded-full blur-2xl pointer-events-none"></div>
                             <div class="absolute -left-12 -bottom-12 w-40 h-40 bg-blue-500/20 rounded-full blur-2xl pointer-events-none"></div>
 
-                            <!-- Header Header -->
+                            <!-- Header -->
                             <div class="border-b border-white/20 pb-4 space-y-1">
                                 <div class="inline-flex items-center space-x-1.5 bg-yellow-400 text-slate-900 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">
                                     <i class="fa-solid fa-graduation-cap"></i>
@@ -547,6 +593,7 @@
             </div>
         </div>
 
+        <!-- CERTIFICATE MODAL -->
         <div id="certificate-modal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-slate-900/80 backdrop-blur-md p-4 flex items-center justify-center">
             <div class="bg-white rounded-3xl w-full max-w-2xl p-8 shadow-2xl border-4 border-asean-yellow text-center space-y-6 relative overflow-hidden">
                 <div class="text-5xl">🏆</div>
@@ -583,7 +630,6 @@
 
     </main>
 
-    <!-- FOOTER -->
     <footer class="bg-slate-900 text-slate-400 text-xs py-6 border-t border-slate-800 mt-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-2">
             <p class="font-bold text-slate-300">
@@ -686,17 +732,14 @@
         }
 
         function updateUI() {
-            // Calculate progress percentage
             const completedCount = Object.values(appState.completed).filter(Boolean).length;
             const totalTasks = Object.keys(appState.completed).length;
             appState.progress = Math.round((completedCount / totalTasks) * 100);
 
-            // Update Header Progress & Score
             document.getElementById('progress-percent-text').innerText = appState.progress + '%';
             document.getElementById('progress-bar-inner').style.width = appState.progress + '%';
             document.getElementById('score-text').innerText = appState.score + '/100';
 
-            // Update Badge Title
             const badgeTitle = document.getElementById('current-badge-title');
             let badgeText = 'NGƯỜI KHÁM PHÁ ASEAN';
             if (appState.score >= 90) {
@@ -708,13 +751,11 @@
             }
             if (badgeTitle) badgeTitle.innerText = badgeText;
 
-            // Update QR Card Displays
             const qrBadgeDisp = document.getElementById('qr-badge-display');
             const qrScoreDisp = document.getElementById('qr-score-display');
             if (qrBadgeDisp) qrBadgeDisp.innerText = badgeText;
             if (qrScoreDisp) qrScoreDisp.innerText = appState.score + '/100';
 
-            // Update Node Badges
             Object.keys(appState.completed).forEach(id => {
                 const badgeEl = document.getElementById(`badge-${id}`);
                 if (badgeEl) {
@@ -749,25 +790,59 @@
             modal.classList.remove('hidden');
 
             const urlInput = document.getElementById('qr-url-input');
-            const warningEl = document.getElementById('qr-preview-warning');
-
             const currentUrl = window.location.href;
-            const isSandbox = !currentUrl || currentUrl.startsWith('blob:') || currentUrl.startsWith('about:') || currentUrl.includes('localhost') || currentUrl.includes('127.0.0.1');
 
-            if (isSandbox) {
-                if (warningEl) warningEl.classList.remove('hidden');
-                if (!urlInput.value || urlInput.value.startsWith('blob:') || urlInput.value.startsWith('about:')) {
+            if (!urlInput.value) {
+                if (isLocalOrSandboxUrl(currentUrl)) {
                     urlInput.value = "https://padlet.com";
-                }
-            } else {
-                if (warningEl) warningEl.classList.add('hidden');
-                if (!urlInput.value) {
+                } else {
                     urlInput.value = currentUrl;
                 }
             }
 
             updateUI();
+            validateAndPreviewQR();
+        }
+
+        function isLocalOrSandboxUrl(url) {
+            if (!url) return true;
+            const u = url.toLowerCase();
+            return u.startsWith('blob:') || u.startsWith('file:') || u.startsWith('about:') || u.includes('localhost') || u.includes('127.0.0.1');
+        }
+
+        function validateAndPreviewQR() {
+            const urlInput = document.getElementById('qr-url-input');
+            let url = urlInput.value.trim();
+
+            const warningEl = document.getElementById('qr-preview-warning');
+            const successEl = document.getElementById('qr-preview-success');
+
+            if (isLocalOrSandboxUrl(url)) {
+                if (warningEl) warningEl.classList.remove('hidden');
+                if (successEl) successEl.classList.add('hidden');
+            } else {
+                if (warningEl) warningEl.classList.add('hidden');
+                if (successEl) successEl.classList.remove('hidden');
+            }
+
             updateQRCode();
+        }
+
+        function toggleHelpAccordion() {
+            playSound('click');
+            const accordion = document.getElementById('hosting-help-accordion');
+            if (accordion) accordion.classList.toggle('hidden');
+        }
+
+        function setSampleUrl(type) {
+            playSound('click');
+            const urlInput = document.getElementById('qr-url-input');
+            if (type === 'padlet') {
+                urlInput.value = "https://padlet.com";
+            } else if (type === 'forms') {
+                urlInput.value = "https://docs.google.com/forms";
+            }
+            validateAndPreviewQR();
         }
 
         function closeQRModal() {
@@ -776,7 +851,15 @@
         }
 
         function updateQRCode() {
-            const url = document.getElementById('qr-url-input').value.trim() || window.location.href;
+            const urlInput = document.getElementById('qr-url-input');
+            let url = urlInput.value.trim() || window.location.href;
+
+            // Automatically prepend https:// if missing
+            if (url && !url.startsWith('http://') && !url.startsWith('https://') && !url.startsWith('blob:') && !url.startsWith('file:')) {
+                url = 'https://' + url;
+                urlInput.value = url;
+            }
+
             const container = document.getElementById('qrcode-container');
             container.innerHTML = "";
 
