@@ -1,0 +1,1489 @@
+<!DOCTYPE html>
+<html lang="vi" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài 5: Cộng đồng ASEAN - Từ ý tưởng đến hiện thực | Lịch sử 12 KNTT</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- QRCodeJS Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    
+    <!-- html2canvas for downloading poster -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        asean: {
+                            red: '#D71921',
+                            blue: '#003399',
+                            yellow: '#FFCC00',
+                            darkRed: '#9E0B0F',
+                            lightRed: '#FFF0F0',
+                            gold: '#D4AF37',
+                            bgLight: '#F8FAFC'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'glow': '0 0 25px rgba(215, 25, 33, 0.35)',
+                        'gold-glow': '0 0 25px rgba(255, 204, 0, 0.5)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Styling & Animations */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8FAFC;
+            color: #1E293B;
+            overflow-x: hidden;
+        }
+
+        .asean-gradient {
+            background: linear-gradient(135deg, #D71921 0%, #9E0B0F 100%);
+        }
+
+        .asean-blue-gradient {
+            background: linear-gradient(135deg, #003399 0%, #001A4D 100%);
+        }
+
+        .asean-card-gradient {
+            background: linear-gradient(180deg, #FFFFFF 0%, #FFF5F5 100%);
+        }
+
+        .glow-effect {
+            animation: pulse-glow 2.5s infinite ease-in-out;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 15px rgba(215, 25, 33, 0.3); }
+            50% { box-shadow: 0 0 30px rgba(215, 25, 33, 0.6); }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F1F5F9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #CBD5E1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94A3B8;
+        }
+
+        .modal-blur {
+            backdrop-filter: blur(8px);
+        }
+
+        /* Print styling for QR Poster */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #printable-qr-card, #printable-qr-card * {
+                visibility: visible;
+            }
+            #printable-qr-card {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                margin: 0;
+                box-shadow: none !important;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between antialiased selection:bg-asean-red selection:text-white">
+
+    <!-- MAIN HEADER -->
+    <header class="sticky top-0 z-40 bg-white border-b border-slate-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <!-- Brand / Title -->
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="showScreen('command-center')">
+                <div class="w-10 h-10 rounded-full asean-gradient flex items-center justify-center text-white shadow-md font-bold text-lg border-2 border-asean-yellow">
+                    <i class="fa-solid font-bold text-yellow-300">10</i>
+                </div>
+                <div>
+                    <span class="text-xs font-bold text-asean-red uppercase tracking-wider block">Lịch sử 12 • Bài 5</span>
+                    <h1 class="text-base sm:text-lg font-extrabold text-slate-800 tracking-tight leading-none">
+                        CỘNG ĐỒNG ASEAN: TỪ Ý TƯỞNG ĐẾN HIỆN THỰC
+                    </h1>
+                </div>
+            </div>
+
+            <!-- Ambassador Stats & Controls -->
+            <div class="flex items-center space-x-2 sm:space-x-4">
+                <!-- QR Code Generator Button for THPT -->
+                <button onclick="openQRModal()" class="flex items-center space-x-2 bg-slate-900 hover:bg-black text-yellow-300 font-bold px-3 py-1.5 rounded-xl border border-slate-700 shadow-sm transition text-xs">
+                    <i class="fa-solid fa-qrcode text-sm"></i>
+                    <span class="hidden sm:inline">Mã QR Học Tập</span>
+                </button>
+
+                <!-- Ambassador Badge -->
+                <div class="hidden lg:flex items-center bg-red-50 border border-red-200 px-3 py-1.5 rounded-full">
+                    <i class="fa-solid fa-award text-asean-red mr-2 text-lg"></i>
+                    <div>
+                        <div class="text-[10px] text-slate-500 uppercase font-bold leading-none">Vai trò</div>
+                        <div class="text-xs font-bold text-asean-red leading-none">Đại sứ trẻ ASEAN</div>
+                    </div>
+                </div>
+
+                <!-- Progress & Score -->
+                <div class="flex items-center space-x-2 sm:space-x-3 bg-slate-100 px-2.5 sm:px-3 py-1.5 rounded-xl border border-slate-200">
+                    <div class="text-right">
+                        <div class="text-[10px] text-slate-500 uppercase font-bold leading-none">Tiến độ</div>
+                        <div class="text-xs font-extrabold text-slate-800 leading-none" id="progress-percent-text">0%</div>
+                    </div>
+                    <div class="w-10 sm:w-12 bg-slate-200 h-2 rounded-full overflow-hidden">
+                        <div id="progress-bar-inner" class="bg-asean-red h-full w-0 transition-all duration-500"></div>
+                    </div>
+                    <div class="h-6 w-px bg-slate-300"></div>
+                    <div class="text-right">
+                        <div class="text-[10px] text-slate-500 uppercase font-bold leading-none">Điểm số</div>
+                        <div class="text-xs font-extrabold text-asean-red leading-none" id="score-text">0/100</div>
+                    </div>
+                </div>
+
+                <!-- Audio Toggle -->
+                <button id="audio-toggle-btn" onclick="toggleAudio()" title="Nhạc ASEAN" class="w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 border border-slate-300 flex items-center justify-center text-slate-700 transition">
+                    <i class="fa-solid fa-volume-xmark text-sm" id="audio-icon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER WITH DYNAMIC SCREENS -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 relative">
+
+        <!-- SCREEN 0: BRIDGE & WELCOME SCREEN -->
+        <section id="screen-welcome" class="space-y-6">
+            <div class="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-xl relative overflow-hidden">
+                <!-- Background decorative elements -->
+                <div class="absolute -right-16 -bottom-16 w-80 h-80 bg-red-100 rounded-full blur-3xl opacity-60 pointer-events-none"></div>
+                <div class="absolute -left-16 -top-16 w-80 h-80 bg-blue-100 rounded-full blur-3xl opacity-60 pointer-events-none"></div>
+
+                <div class="relative z-10 max-w-3xl mx-auto text-center space-y-6">
+                    <div class="inline-flex items-center space-x-2 bg-red-100 border border-red-200 text-asean-red px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider">
+                        <i class="fa-solid fa-handshake"></i>
+                        <span>Cầu nối bài học • Từ Bài 4 đến Bài 5</span>
+                    </div>
+
+                    <h2 class="text-2xl sm:text-4xl font-black text-slate-900 leading-tight">
+                        Ở Bài 4, bạn đã biết ASEAN 10 được hình thành như thế nào.<br>
+                        <span class="text-asean-red">Nhưng ASEAN 10 chưa phải là điểm kết thúc!</span>
+                    </h2>
+
+                    <div class="p-5 bg-slate-50 rounded-2xl border border-slate-200 text-slate-700 font-medium text-base sm:text-lg italic">
+                        "Làm thế nào để các quốc gia Đông Nam Á xây dựng một Cộng đồng gắn kết, hòa bình và thịnh vượng cùng phát triển?"
+                    </div>
+
+                    <div class="pt-2 flex flex-col sm:flex-row items-center justify-center gap-4">
+                        <div class="text-left bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center space-x-4 max-w-md">
+                            <div class="w-12 h-12 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center text-xl shrink-0">
+                                🎖️
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-900 text-sm">Nhiệm vụ mới của bạn</h4>
+                                <p class="text-xs text-slate-600">Nhập vai <strong class="text-asean-red">Đại sứ trẻ ASEAN</strong>, khám phá hành trình xây dựng Cộng đồng từ Ý tưởng đến Hiện thực.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-4 flex flex-wrap items-center justify-center gap-3">
+                        <button onclick="startMissionHub()" class="asean-gradient text-white font-extrabold px-8 py-4 rounded-2xl shadow-lg hover:shadow-red-500/30 transform hover:-translate-y-0.5 transition-all text-lg flex items-center justify-center space-x-3">
+                            <span>BẮT ĐẦU VÀO TRUNG TÂM ĐIỀU HÀNH</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                        <button onclick="openQRModal()" class="bg-slate-900 hover:bg-black text-yellow-300 font-bold px-6 py-4 rounded-2xl shadow-md transition text-base flex items-center space-x-2">
+                            <i class="fa-solid fa-qrcode text-lg"></i>
+                            <span>TẠO MÃ QR LỚP HỌC</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SCREEN 1: COMMAND CENTER (MAIN DASHBOARD HUB) -->
+        <section id="screen-command-center" class="hidden space-y-8">
+            <!-- Header Banner inside Dashboard -->
+            <div class="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white rounded-3xl p-6 sm:p-8 shadow-xl relative overflow-hidden">
+                <div class="absolute right-0 top-0 bottom-0 w-1/3 opacity-10 flex items-center justify-center pointer-events-none">
+                    <i class="fa-solid fa-globe text-9xl"></i>
+                </div>
+                
+                <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+                    <div>
+                        <div class="flex items-center space-x-2 text-yellow-400 text-xs font-bold uppercase tracking-wider mb-2">
+                            <i class="fa-solid fa-shield-halved"></i>
+                            <span>ASEAN COMMUNITY COMMAND CENTER</span>
+                        </div>
+                        <h2 class="text-2xl sm:text-3xl font-black text-white">TRUNG TÂM ĐIỀU HÀNH CỘNG ĐỒNG ASEAN</h2>
+                        <p class="text-slate-300 text-sm mt-1 max-w-xl">
+                            Chào mừng Đại sứ trẻ! Hãy chọn các phòng điều hành bên dưới để thu thập hồ sơ tư liệu, giải mã kiến thức và hoàn thành sứ mệnh.
+                        </p>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                        <div class="bg-white/10 backdrop-blur-md border border-white/20 p-3.5 rounded-2xl flex items-center space-x-3 shrink-0">
+                            <div class="w-10 h-10 rounded-xl bg-yellow-400 text-slate-900 flex items-center justify-center text-xl font-black shadow-md">
+                                🎖️
+                            </div>
+                            <div>
+                                <div class="text-[10px] text-slate-300 font-semibold">Danh hiệu hiện tại</div>
+                                <div class="text-sm font-extrabold text-yellow-300" id="current-badge-title">Người khám phá ASEAN</div>
+                            </div>
+                        </div>
+
+                        <button onclick="openQRModal()" class="bg-yellow-400 hover:bg-yellow-300 text-slate-900 font-extrabold px-4 py-3 rounded-2xl shadow-lg transition text-xs flex items-center space-x-2 shrink-0">
+                            <i class="fa-solid fa-qrcode text-base"></i>
+                            <span>THẺ QR ĐẠI SỨ</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MISSION NODES GRID -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                <!-- NODE 1 -->
+                <div id="node-m1" onclick="openMission('m1')" class="bg-white rounded-2xl p-6 border-2 border-slate-200 hover:border-asean-red shadow-sm hover:shadow-md transition cursor-pointer group relative overflow-hidden">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-red-100 text-asean-red flex items-center justify-center text-xl font-bold group-hover:scale-110 transition">
+                            💡
+                        </div>
+                        <span id="badge-m1" class="text-[11px] font-bold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600">Sẵn sàng</span>
+                    </div>
+                    <span class="text-xs font-extrabold text-asean-red uppercase tracking-wider">Nhiệm vụ 01</span>
+                    <h3 class="text-lg font-extrabold text-slate-900 group-hover:text-asean-red transition mt-1">Ý TƯỞNG ĐẾN TỪ ĐÂU?</h3>
+                    <p class="text-slate-600 text-xs mt-2 leading-relaxed">
+                        Khám phá Phòng lưu trữ ý tưởng với các mốc, Tuyên bố & Hiến chương đặt nền móng cho Cộng đồng.
+                    </p>
+                    <div class="mt-4 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-asean-red">
+                        <span>Khám phá ngay</span>
+                        <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition"></i>
+                    </div>
+                </div>
+
+                <!-- NODE 2 -->
+                <div id="node-m2" onclick="openMission('m2')" class="bg-white rounded-2xl p-6 border-2 border-slate-200 hover:border-asean-red shadow-sm hover:shadow-md transition cursor-pointer group relative overflow-hidden">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center text-xl font-bold group-hover:scale-110 transition">
+                            🎯
+                        </div>
+                        <span id="badge-m2" class="text-[11px] font-bold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600">Khóa</span>
+                    </div>
+                    <span class="text-xs font-extrabold text-amber-600 uppercase tracking-wider">Nhiệm vụ 02</span>
+                    <h3 class="text-lg font-extrabold text-slate-900 group-hover:text-amber-600 transition mt-1">MỤC TIÊU XÂY DỰNG</h3>
+                    <p class="text-slate-600 text-xs mt-2 leading-relaxed">
+                        Phòng Mục tiêu: Ghép từ khóa, giải mã tôn chỉ mục đích cốt lõi của Cộng đồng ASEAN theo SGK.
+                    </p>
+                    <div class="mt-4 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-amber-600">
+                        <span>Vào phòng mục tiêu</span>
+                        <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition"></i>
+                    </div>
+                </div>
+
+                <!-- NODE 3 -->
+                <div id="node-m3" onclick="openMission('m3')" class="bg-white rounded-2xl p-6 border-2 border-slate-200 hover:border-asean-red shadow-sm hover:shadow-md transition cursor-pointer group relative overflow-hidden">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-xl font-bold group-hover:scale-110 transition">
+                            🛤️
+                        </div>
+                        <span id="badge-m3" class="text-[11px] font-bold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600">Khóa</span>
+                    </div>
+                    <span class="text-xs font-extrabold text-blue-600 uppercase tracking-wider">Nhiệm vụ 03</span>
+                    <h3 class="text-lg font-extrabold text-slate-900 group-hover:text-blue-600 transition mt-1">KẾ HOẠCH HÀNH TRÌNH</h3>
+                    <p class="text-slate-600 text-xs mt-2 leading-relaxed">
+                        Bản đồ hành trình từ Tầm nhìn 2020, Chương trình Hà Nội, Vientiane đến Tuyên bố Kuala Lumpur 2015.
+                    </p>
+                    <div class="mt-4 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-blue-600">
+                        <span>Mở bản đồ hành trình</span>
+                        <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition"></i>
+                    </div>
+                </div>
+
+                <!-- NODE 4 -->
+                <div id="node-m4" onclick="openMission('m4')" class="bg-white rounded-2xl p-6 border-2 border-slate-200 hover:border-asean-red shadow-sm hover:shadow-md transition cursor-pointer group relative overflow-hidden lg:col-span-2">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="flex space-x-2">
+                            <div class="w-10 h-10 rounded-xl bg-red-100 text-asean-red flex items-center justify-center text-lg font-bold">🏛️</div>
+                            <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-lg font-bold">💰</div>
+                            <div class="w-10 h-10 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center text-lg font-bold">👨‍👩‍👧‍👦</div>
+                        </div>
+                        <span id="badge-m4" class="text-[11px] font-bold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600">Khóa</span>
+                    </div>
+                    <span class="text-xs font-extrabold text-asean-red uppercase tracking-wider">Nhiệm vụ TRUNG TÂM 04</span>
+                    <h3 class="text-xl font-extrabold text-slate-900 group-hover:text-asean-red transition mt-1">BA TRỤ CỘT CỘNG ĐỒNG ASEAN</h3>
+                    <p class="text-slate-600 text-xs mt-2 leading-relaxed">
+                        Khám phá sâu 3 trụ cột: <strong>Chính trị - An ninh (APSC)</strong>, <strong>Kinh tế (AEC)</strong>, và <strong>Văn hóa - Xã hội (ASCC)</strong>. Sau đó chinh phục Minigame "Ghép đúng - Hiểu sâu"!
+                    </p>
+                    <div class="mt-4 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-asean-red">
+                        <span>Khám phá 3 Trụ cột & Giải đố</span>
+                        <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition"></i>
+                    </div>
+                </div>
+
+                <!-- NODE 5 -->
+                <div id="node-m5" onclick="openMission('m5')" class="bg-white rounded-2xl p-6 border-2 border-slate-200 hover:border-asean-red shadow-sm hover:shadow-md transition cursor-pointer group relative overflow-hidden">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center text-xl font-bold group-hover:scale-110 transition">
+                            🚀
+                        </div>
+                        <span id="badge-m5" class="text-[11px] font-bold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600">Khóa</span>
+                    </div>
+                    <span class="text-xs font-extrabold text-indigo-600 uppercase tracking-wider">Nhiệm vụ 05</span>
+                    <h3 class="text-lg font-extrabold text-slate-900 group-hover:text-indigo-600 transition mt-1">ASEAN SAU NĂM 2015</h3>
+                    <p class="text-slate-600 text-xs mt-2 leading-relaxed">
+                        3 Cửa điều hành: Thành tựu nổi bật 🏆 • Thách thức thực tế ⚠️ • Triển vọng tương lai 🚀.
+                    </p>
+                    <div class="mt-4 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-indigo-600">
+                        <span>Vào phòng điều hành sau 2015</span>
+                        <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition"></i>
+                    </div>
+                </div>
+
+                <!-- SECTION: LUYỆN TẬP & VẬN DỤNG -->
+                <div id="node-luyentap" onclick="openMission('luyentap')" class="bg-slate-900 text-white rounded-2xl p-6 hover:bg-slate-800 shadow-md transition cursor-pointer group relative overflow-hidden md:col-span-2">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="w-10 h-10 rounded-xl bg-yellow-400 text-slate-900 flex items-center justify-center text-lg font-bold">
+                            🧠
+                        </div>
+                        <span id="badge-luyentap" class="text-[11px] font-bold px-2.5 py-1 rounded-full bg-white/10 text-yellow-300 border border-yellow-400/30">Luyện tập</span>
+                    </div>
+                    <h3 class="text-lg font-extrabold text-white group-hover:text-yellow-300 transition">KIỂM TRA NĂNG LỰC ĐẠI SỨ (10 CÂU TRẮC NGHIỆM)</h3>
+                    <p class="text-slate-300 text-xs mt-1">Luyện tập củng cố kiến thức Bài 5 SGK: trắc nghiệm, khai thác tư liệu, đúng/sai, phân tích.</p>
+                </div>
+
+                <div id="node-vandung" onclick="openMission('vandung')" class="bg-gradient-to-br from-asean-red to-asean-darkRed text-white rounded-2xl p-6 shadow-md hover:shadow-lg transition cursor-pointer group relative overflow-hidden">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="w-10 h-10 rounded-xl bg-white text-asean-red flex items-center justify-center text-lg font-bold">
+                            🎖️
+                        </div>
+                        <span id="badge-vandung" class="text-[11px] font-bold px-2.5 py-1 rounded-full bg-white/20 text-white">Vận dụng</span>
+                    </div>
+                    <h3 class="text-lg font-extrabold text-white group-hover:text-yellow-300 transition">NHIỆM VỤ ĐẠI SỨ TRẺ</h3>
+                    <p class="text-slate-100 text-xs mt-1">Đề xuất hành động thực tế của học sinh đóng góp cho Cộng đồng ASEAN.</p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- MISSION WORKSPACE OVERLAY / MODAL CONTAINER -->
+        <div id="mission-modal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-slate-900/70 backdrop-blur-md p-3 sm:p-6 flex items-center justify-center">
+            <div class="bg-white rounded-3xl w-full max-w-5xl max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-200 flex flex-col relative">
+                
+                <!-- Modal Sticky Header -->
+                <div class="sticky top-0 z-20 bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between rounded-t-3xl">
+                    <div class="flex items-center space-x-3">
+                        <div id="modal-icon" class="w-10 h-10 rounded-xl bg-red-100 text-asean-red flex items-center justify-center text-xl font-bold">
+                            💡
+                        </div>
+                        <div>
+                            <span id="modal-subtext" class="text-xs font-extrabold text-asean-red uppercase tracking-wider block">NHIỆM VỤ 01</span>
+                            <h2 id="modal-title" class="text-lg sm:text-xl font-extrabold text-slate-900 leading-tight">TIÊU ĐỀ NHIỆM VỤ</h2>
+                        </div>
+                    </div>
+                    
+                    <button onclick="closeMissionModal()" class="w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center font-bold transition">
+                        <i class="fa-solid fa-xmark text-lg"></i>
+                    </button>
+                </div>
+
+                <!-- Modal Body Content -->
+                <div id="modal-body" class="p-6 sm:p-8 space-y-6 flex-grow">
+                    <!-- Dynamic mission content injected via JS -->
+                </div>
+
+                <!-- Modal Footer -->
+                <div class="sticky bottom-0 bg-slate-50 border-t border-slate-200 px-6 py-4 flex items-center justify-between rounded-b-3xl">
+                    <div class="text-xs font-semibold text-slate-500" id="modal-footer-info">
+                        Yêu cầu: Bám sát kiến thức SGK Lịch sử 12 Kết nối tri thức
+                    </div>
+                    <button onclick="closeMissionModal()" class="px-5 py-2.5 bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs rounded-xl transition">
+                        Đóng phòng làm việc
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- NEW FEATURE: QR CODE & POSTER GENERATOR MODAL FOR THPT STUDENTS -->
+        <div id="qr-modal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-slate-900/80 backdrop-blur-md p-3 sm:p-6 flex items-center justify-center">
+            <div class="bg-white rounded-3xl w-full max-w-3xl overflow-hidden shadow-2xl border border-slate-200 flex flex-col relative">
+                
+                <!-- QR Modal Header -->
+                <div class="bg-slate-900 text-white px-6 py-4 flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-xl bg-yellow-400 text-slate-900 flex items-center justify-center text-xl font-bold">
+                            <i class="fa-solid fa-qrcode"></i>
+                        </div>
+                        <div>
+                            <span class="text-[10px] font-bold text-yellow-400 uppercase tracking-widest block">HỌC TẬP TƯƠNG TÁC THPT</span>
+                            <h3 class="text-base sm:text-lg font-black text-white leading-none">THẺ QR BÀI HỌC & ĐẠI SỨ ASEA</h3>
+                        </div>
+                    </div>
+                    <button onclick="closeQRModal()" class="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <!-- QR Modal Body -->
+                <div class="p-6 space-y-6 overflow-y-auto max-h-[80vh]">
+                    
+                    <!-- URL Input Box -->
+                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-3">
+                        <label class="block text-xs font-bold text-slate-800 uppercase tracking-wider">
+                            <i class="fa-solid fa-link text-asean-red mr-1"></i> Liên kết kết nối bài học (Tùy chỉnh nếu cần):
+                        </label>
+                        <div class="flex gap-2">
+                            <input id="qr-url-input" type="text" class="flex-grow text-xs p-3 rounded-xl border border-slate-300 focus:outline-none focus:border-asean-red font-mono" placeholder="Nhập đường dẫn trang web hoặc liên kết bài học...">
+                            <button onclick="updateQRCode()" class="bg-asean-red hover:bg-asean-darkRed text-white text-xs font-extrabold px-4 py-3 rounded-xl transition shrink-0">
+                                Tạo Mã QR
+                            </button>
+                        </div>
+                        <p class="text-[11px] text-slate-500">
+                            💡 Mẹo cho học sinh: Bạn có thể dán link Google Form nộp bài, link Padlet thảo luận nhóm hoặc link bài giảng này để chia sẻ cho cả lớp cùng quét!
+                        </p>
+                    </div>
+
+                    <!-- PRINTABLE POSTER CARD CONTAINER -->
+                    <div class="flex justify-center">
+                        <div id="printable-qr-card" class="bg-gradient-to-br from-red-700 via-asean-red to-red-900 text-white p-6 sm:p-8 rounded-3xl shadow-2xl border-4 border-yellow-400 max-w-md w-full relative overflow-hidden text-center space-y-5">
+                            
+                            <!-- Card Background Graphic Pattern -->
+                            <div class="absolute -right-12 -top-12 w-40 h-40 bg-yellow-400/10 rounded-full blur-2xl pointer-events-none"></div>
+                            <div class="absolute -left-12 -bottom-12 w-40 h-40 bg-blue-500/20 rounded-full blur-2xl pointer-events-none"></div>
+
+                            <!-- Header Header -->
+                            <div class="border-b border-white/20 pb-4 space-y-1">
+                                <div class="inline-flex items-center space-x-1.5 bg-yellow-400 text-slate-900 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">
+                                    <i class="fa-solid fa-graduation-cap"></i>
+                                    <span>LỊCH SỬ 12 • KẾT NỐI TRI THỨC</span>
+                                </div>
+                                <h2 class="text-xl sm:text-2xl font-black text-white leading-tight mt-2">CỘNG ĐỒNG ASEAN</h2>
+                                <p class="text-yellow-300 text-xs font-bold uppercase tracking-widest">TỪ Ý TƯỞNG ĐẾN HIỆN THỰC (BÀI 5)</p>
+                            </div>
+
+                            <!-- Student Status Banner inside Card -->
+                            <div class="bg-black/30 backdrop-blur-md rounded-2xl p-3 border border-white/10 flex items-center justify-between text-left">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 rounded-full bg-yellow-400 text-slate-900 flex items-center justify-center font-black text-lg shadow">
+                                        🎖️
+                                    </div>
+                                    <div>
+                                        <div class="text-[10px] text-slate-300 font-semibold uppercase leading-none">Danh hiệu Đại sứ</div>
+                                        <div class="text-xs font-extrabold text-yellow-300 mt-0.5" id="qr-badge-display">Người khám phá ASEAN</div>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-[10px] text-slate-300 font-semibold uppercase leading-none">Điểm số</div>
+                                    <div class="text-sm font-black text-white mt-0.5" id="qr-score-display">0/100</div>
+                                </div>
+                            </div>
+
+                            <!-- QR CODE RENDER TARGET -->
+                            <div class="bg-white p-4 rounded-2xl inline-block shadow-xl border-4 border-yellow-300 my-2 relative group">
+                                <div id="qrcode-container" class="flex justify-center items-center"></div>
+                                <div class="text-[10px] font-bold text-slate-700 mt-2 flex items-center justify-center space-x-1">
+                                    <i class="fa-solid fa-camera text-asean-red"></i>
+                                    <span>QUÉT MÃ ĐỂ VÀO BÀI HỌC</span>
+                                </div>
+                            </div>
+
+                            <!-- Footer Note -->
+                            <div class="text-[11px] text-slate-200 leading-relaxed space-y-1">
+                                <p class="font-bold">Trải nghiệm không gian học tập tương tác số hoá</p>
+                                <p class="text-[10px] text-yellow-200 opacity-90">Sử dụng Camera điện thoại, Zalo hoặc Chrome để quét mã</p>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Action Controls -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+                        <button onclick="downloadQRPoster()" class="bg-slate-900 hover:bg-black text-white text-xs font-extrabold p-3 rounded-xl shadow transition flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-download"></i>
+                            <span>Tải Thẻ QR (Ảnh PNG)</span>
+                        </button>
+                        <button onclick="printQRPoster()" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-extrabold p-3 rounded-xl shadow transition flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-print"></i>
+                            <span>In Thẻ Trình Chiếu</span>
+                        </button>
+                        <button onclick="copyQRLink()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold p-3 rounded-xl shadow transition flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-copy"></i>
+                            <span>Sao chép Đường Dẫn</span>
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <!-- CERTIFICATE / FINAL EVALUATION MODAL -->
+        <div id="certificate-modal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-slate-900/80 backdrop-blur-md p-4 flex items-center justify-center">
+            <div class="bg-white rounded-3xl w-full max-w-2xl p-8 shadow-2xl border-4 border-asean-yellow text-center space-y-6 relative overflow-hidden">
+                <div class="text-5xl">🏆</div>
+                <div>
+                    <span class="text-xs font-bold text-asean-red uppercase tracking-widest block">CHỨNG NHẬN HOÀN THÀNH</span>
+                    <h2 class="text-2xl sm:text-3xl font-black text-slate-900 mt-1">ĐẠI SỨ TRẺ ASEAN XUẤT SẮC</h2>
+                </div>
+
+                <div class="p-6 bg-amber-50 rounded-2xl border border-amber-200 text-left space-y-3">
+                    <div class="flex justify-between items-center text-sm font-bold text-slate-800">
+                        <span>Tổng điểm tích lũy:</span>
+                        <span id="cert-score" class="text-xl text-asean-red">100/100</span>
+                    </div>
+                    <div class="flex justify-between items-center text-sm font-bold text-slate-800">
+                        <span>Danh hiệu đạt được:</span>
+                        <span id="cert-badge" class="text-base text-amber-700">🌟 ĐẠI SỨ ASEAN XUẤT SẮC</span>
+                    </div>
+                    <p class="text-xs text-slate-600 pt-2 border-t border-amber-200">
+                        Bạn đã hoàn thành xuất sắc toàn bộ 5 Nhiệm vụ, Trò chơi Ghép cột, Bài kiểm tra Năng lực và Vận dụng bài 5 - SGK Lịch sử 12 Kết nối tri thức với cuộc sống!
+                    </p>
+                </div>
+
+                <div class="flex justify-center space-x-4">
+                    <button onclick="closeCertModal()" class="asean-gradient text-white font-extrabold px-6 py-3 rounded-xl shadow-md text-sm">
+                        Xác nhận & Hoàn tất Chủ đề 2
+                    </button>
+                    <button onclick="openQRModal()" class="bg-slate-900 text-yellow-300 hover:bg-black font-extrabold px-6 py-3 rounded-xl shadow-md text-sm flex items-center space-x-2">
+                        <i class="fa-solid fa-qrcode"></i>
+                        <span>Tạo Thẻ Kết Quả QR</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-900 text-slate-400 text-xs py-6 border-t border-slate-800 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-2">
+            <p class="font-bold text-slate-300">
+                CHƯƠNG TRÌNH GIÁO DỤC PHỔ THÔNG 2018 — LỊCH SỬ 12 KẾT NỐI TRI THỨC VỚI CUỘC SỐNG
+            </p>
+            <p>Bài 5: Cộng đồng ASEAN - Từ ý tưởng đến hiện thực • Ứng dụng Học tập Tương tác "Đại sứ trẻ ASEAN"</p>
+        </div>
+    </footer>
+
+    <!-- APPLICATION JAVASCRIPT LOGIC -->
+    <script>
+        // Global State
+        let appState = {
+            progress: 0,
+            score: 0,
+            completed: {
+                m1: false,
+                m2: false,
+                m3: false,
+                m4: false,
+                m5: false,
+                luyentap: false,
+                vandung: false
+            },
+            audioPlaying: false,
+            qrObject: null
+        };
+
+        // Web Audio API Synth
+        let audioCtx = null;
+
+        function playSound(type) {
+            try {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                if (type === 'click') {
+                    osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.08);
+                } else if (type === 'correct') {
+                    osc.frequency.setValueAtTime(523.25, audioCtx.currentTime);
+                    osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.1);
+                    osc.frequency.setValueAtTime(783.99, audioCtx.currentTime + 0.2);
+                    gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.35);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.35);
+                } else if (type === 'unlock') {
+                    osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+                    osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.15);
+                    gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.4);
+                }
+            } catch (e) {
+                console.log("Audio not supported or blocked");
+            }
+        }
+
+        function toggleAudio() {
+            appState.audioPlaying = !appState.audioPlaying;
+            const icon = document.getElementById('audio-icon');
+            const btn = document.getElementById('audio-toggle-btn');
+            
+            if (appState.audioPlaying) {
+                icon.className = 'fa-solid fa-volume-high text-asean-red';
+                btn.classList.add('border-asean-red', 'bg-red-50');
+                playSound('correct');
+            } else {
+                icon.className = 'fa-solid fa-volume-xmark text-slate-700';
+                btn.classList.remove('border-asean-red', 'bg-red-50');
+            }
+        }
+
+        function startMissionHub() {
+            playSound('click');
+            document.getElementById('screen-welcome').classList.add('hidden');
+            document.getElementById('screen-command-center').classList.remove('hidden');
+            updateUI();
+        }
+
+        function showScreen(screenId) {
+            playSound('click');
+            if (screenId === 'command-center') {
+                document.getElementById('screen-welcome').classList.add('hidden');
+                document.getElementById('screen-command-center').classList.remove('hidden');
+            }
+        }
+
+        function updateUI() {
+            // Calculate progress percentage
+            const completedCount = Object.values(appState.completed).filter(Boolean).length;
+            const totalTasks = Object.keys(appState.completed).length;
+            appState.progress = Math.round((completedCount / totalTasks) * 100);
+
+            // Update Header Progress & Score
+            document.getElementById('progress-percent-text').innerText = appState.progress + '%';
+            document.getElementById('progress-bar-inner').style.width = appState.progress + '%';
+            document.getElementById('score-text').innerText = appState.score + '/100';
+
+            // Update Badge Title
+            const badgeTitle = document.getElementById('current-badge-title');
+            let badgeText = 'NGƯỜI KHÁM PHÁ ASEAN';
+            if (appState.score >= 90) {
+                badgeText = '🌟 ĐẠI SỨ ASEAN XUẤT SẮC';
+            } else if (appState.score >= 50) {
+                badgeText = '🏅 ĐẠI SỨ ASEAN';
+            } else {
+                badgeText = '🌱 NGƯỜI KHÁM PHÁ ASEAN';
+            }
+            if (badgeTitle) badgeTitle.innerText = badgeText;
+
+            // Update QR Card Displays
+            const qrBadgeDisp = document.getElementById('qr-badge-display');
+            const qrScoreDisp = document.getElementById('qr-score-display');
+            if (qrBadgeDisp) qrBadgeDisp.innerText = badgeText;
+            if (qrScoreDisp) qrScoreDisp.innerText = appState.score + '/100';
+
+            // Update Node Badges
+            Object.keys(appState.completed).forEach(id => {
+                const badgeEl = document.getElementById(`badge-${id}`);
+                if (badgeEl) {
+                    if (appState.completed[id]) {
+                        badgeEl.innerText = 'Đã hoàn thành';
+                        badgeEl.className = 'text-[11px] font-bold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-700 border border-emerald-300';
+                    } else if (isNodeUnlocked(id)) {
+                        badgeEl.innerText = 'Sẵn sàng';
+                        badgeEl.className = 'text-[11px] font-bold px-2.5 py-1 rounded-full bg-blue-100 text-blue-700 border border-blue-200';
+                    } else {
+                        badgeEl.innerText = 'Chưa mở';
+                        badgeEl.className = 'text-[11px] font-bold px-2.5 py-1 rounded-full bg-slate-100 text-slate-500';
+                    }
+                }
+            });
+        }
+
+        function isNodeUnlocked(id) {
+            if (id === 'm1') return true;
+            if (id === 'm2') return appState.completed.m1;
+            if (id === 'm3') return appState.completed.m2;
+            if (id === 'm4') return appState.completed.m3;
+            if (id === 'm5') return appState.completed.m4;
+            if (id === 'luyentap') return appState.completed.m5;
+            if (id === 'vandung') return appState.completed.luyentap;
+            return true;
+        }
+
+        // QR CODE MODAL FUNCTIONS
+        function openQRModal() {
+            playSound('click');
+            const modal = document.getElementById('qr-modal');
+            modal.classList.remove('hidden');
+
+            const urlInput = document.getElementById('qr-url-input');
+            if (!urlInput.value) {
+                urlInput.value = window.location.href || "https://lichsu12.kntt.asean-community.edu.vn";
+            }
+
+            updateUI();
+            updateQRCode();
+        }
+
+        function closeQRModal() {
+            playSound('click');
+            document.getElementById('qr-modal').classList.add('hidden');
+        }
+
+        function updateQRCode() {
+            const url = document.getElementById('qr-url-input').value.trim() || window.location.href;
+            const container = document.getElementById('qrcode-container');
+            container.innerHTML = "";
+
+            try {
+                appState.qrObject = new QRCode(container, {
+                    text: url,
+                    width: 160,
+                    height: 160,
+                    colorDark: "#000000",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+            } catch (e) {
+                container.innerHTML = `<p class="text-xs text-red-500 font-bold p-2">Lỗi tạo mã QR: ${e.message}</p>`;
+            }
+        }
+
+        function downloadQRPoster() {
+            playSound('click');
+            showToast("📸 Đang tạo ảnh Thẻ QR chất lượng cao...");
+            const card = document.getElementById('printable-qr-card');
+
+            if (typeof html2canvas !== 'undefined') {
+                html2canvas(card, { scale: 2, useCORS: true, backgroundColor: null }).then(canvas => {
+                    const image = canvas.toDataURL("image/png");
+                    const link = document.createElement('a');
+                    link.href = image;
+                    link.download = `The_QR_Dai_Su_ASEAN_LichSu12.png`;
+                    link.click();
+                    showToast("✅ Đã tải Thẻ QR thành công!");
+                }).catch(err => {
+                    showToast("⚠️ Không thể tải ảnh. Hãy chụp màn hình thẻ QR!");
+                });
+            } else {
+                showToast("⚠️ Tính năng tải ảnh chưa sẵn sàng, vui lòng chụp màn hình!");
+            }
+        }
+
+        function printQRPoster() {
+            playSound('click');
+            window.print();
+        }
+
+        function copyQRLink() {
+            playSound('click');
+            const urlInput = document.getElementById('qr-url-input');
+            urlInput.select();
+            try {
+                document.execCommand('copy');
+                showToast("📋 Đã sao chép đường dẫn bài học!");
+            } catch (err) {
+                showToast("⚠️ Không thể sao chép tự động.");
+            }
+        }
+
+        function openMission(id) {
+            playSound('click');
+            if (!isNodeUnlocked(id)) {
+                showToast("⚠️ Hãy hoàn thành các nhiệm vụ trước để mở khóa khu vực này!");
+                return;
+            }
+
+            const modal = document.getElementById('mission-modal');
+            const modalTitle = document.getElementById('modal-title');
+            const modalSubtext = document.getElementById('modal-subtext');
+            const modalIcon = document.getElementById('modal-icon');
+            const modalBody = document.getElementById('modal-body');
+
+            modal.classList.remove('hidden');
+
+            if (id === 'm1') {
+                modalIcon.innerText = '💡';
+                modalSubtext.innerText = 'NHIỆM VỤ 01 • BÁM SÁT SGK BÀI 5';
+                modalTitle.innerText = 'PHÒNG LƯU TRỮ Ý TƯỞNG XÂY DỰNG CỘNG ĐỒNG ASEAN';
+                renderMission1(modalBody);
+            } else if (id === 'm2') {
+                modalIcon.innerText = '🎯';
+                modalSubtext.innerText = 'NHIỆM VỤ 02 • BÁM SÁT SGK BÀI 5';
+                modalTitle.innerText = 'PHÒNG MỤC TIÊU XÂY DỰNG CỘNG ĐỒNG';
+                renderMission2(modalBody);
+            } else if (id === 'm3') {
+                modalIcon.innerText = '🛤️';
+                modalSubtext.innerText = 'NHIỆM VỤ 03 • BÁM SÁT SGK BÀI 5';
+                modalTitle.innerText = 'CON ĐƯỜNG HÀNH TRÌNH XÂY DỰNG CỘNG ĐỒNG';
+                renderMission3(modalBody);
+            } else if (id === 'm4') {
+                modalIcon.innerText = '🏛️';
+                modalSubtext.innerText = 'NHIỆM VỤ TRUNG TÂM 04 • BÁM SÁT SGK BÀI 5';
+                modalTitle.innerText = 'BA TRỤ CỘT VÀ MINIGAME "GHÉP ĐÚNG - HIỂU SÂU"';
+                renderMission4(modalBody);
+            } else if (id === 'm5') {
+                modalIcon.innerText = '🚀';
+                modalSubtext.innerText = 'NHIỆM VỤ 05 • BÁM SÁT SGK BÀI 5';
+                modalTitle.innerText = 'PHÒNG ĐIỀU HÀNH CỘNG ĐỒNG ASEAN SAU NĂM 2015';
+                renderMission5(modalBody);
+            } else if (id === 'luyentap') {
+                modalIcon.innerText = '🧠';
+                modalSubtext.innerText = 'LUYỆN TẬP SGK BÀI 5';
+                modalTitle.innerText = 'KIỂM TRA NĂNG LỰC ĐẠI SỨ TRẺ (10 CÂU TRẮC NGHIỆM)';
+                renderLuyenTap(modalBody);
+            } else if (id === 'vandung') {
+                modalIcon.innerText = '🎖️';
+                modalSubtext.innerText = 'VẬN DỤNG SGK BÀI 5';
+                modalTitle.innerText = 'NHIỆM VỤ THỰC TẾ CỦA ĐẠI SỨ TRẺ ASEAN';
+                renderVanDung(modalBody);
+            }
+        }
+
+        function closeMissionModal() {
+            playSound('click');
+            document.getElementById('mission-modal').classList.add('hidden');
+            updateUI();
+        }
+
+        function showToast(msg) {
+            const toast = document.createElement('div');
+            toast.className = 'fixed bottom-6 right-6 z-50 bg-slate-900 text-white px-5 py-3 rounded-2xl shadow-2xl border border-slate-700 text-sm font-bold animate-bounce';
+            toast.innerText = msg;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        // MISSION 1 CONTENT: Ý TƯỞNG XÂY DỰNG CỘNG ĐỒNG ASEAN
+        function renderMission1(container) {
+            container.innerHTML = `
+                <div class="space-y-6">
+                    <div class="p-4 bg-red-50 rounded-2xl border border-red-200 text-slate-700 text-sm">
+                        <strong class="text-asean-red">Hướng dẫn:</strong> Mở từng hồ sơ lưu trữ theo dòng lịch sử chính xác trong <strong>SGK Lịch sử 12 Bài 5</strong>. Trả lời đúng các câu hỏi kiểm tra tư liệu để thu thập <strong>15 điểm</strong>.
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+                            <div class="flex items-center justify-between">
+                                <span class="px-3 py-1 bg-asean-red text-white font-extrabold text-xs rounded-full">Năm 1967</span>
+                                <span class="text-xs font-bold text-slate-500">Tư liệu 1 • SGK Bài 5</span>
+                            </div>
+                            <h4 class="font-extrabold text-slate-900 text-base">Tuyên bố Băng Cốc (8-1967)</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed bg-slate-50 p-3 rounded-xl border border-slate-200">
+                                "Nêu ý tưởng về một cộng đồng hòa bình và thịnh vượng ở Đông Nam Á thông qua nỗ lực chung, tinh thần bình đẳng và hợp tác."
+                            </p>
+                            <div class="pt-2">
+                                <label class="block text-xs font-bold text-slate-800 mb-2">❓ Câu hỏi tư liệu: Tuyên bố Băng Cốc 1967 đã thể hiện điều gì đối với ý tưởng Cộng đồng ASEAN?</label>
+                                <div class="space-y-2">
+                                    <button onclick="checkM1Q(this, true)" class="w-full text-left p-2.5 text-xs rounded-xl border border-slate-200 hover:border-asean-red hover:bg-red-50 transition">
+                                        A. Nêu ý tưởng ban đầu về một cộng đồng hòa bình, thịnh vượng ở khu vực.
+                                    </button>
+                                    <button onclick="checkM1Q(this, false)" class="w-full text-left p-2.5 text-xs rounded-xl border border-slate-200 hover:border-asean-red hover:bg-red-50 transition">
+                                        B. Chính thức thành lập Cộng đồng ASEAN với 3 trụ cột.
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+                            <div class="flex items-center justify-between">
+                                <span class="px-3 py-1 bg-amber-500 text-white font-extrabold text-xs rounded-full">Năm 1976</span>
+                                <span class="text-xs font-bold text-slate-500">Tư liệu 2 • SGK Bài 5</span>
+                            </div>
+                            <h4 class="font-extrabold text-slate-900 text-base">Hiệp ước Bali (TAC - 1976)</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed bg-slate-50 p-3 rounded-xl border border-slate-200">
+                                "Xác định tôn chỉ, mục đích và những nguyên tắc cơ bản trong quan hệ giữa các nước thành viên, đặt nền móng cho ý tưởng xây dựng Cộng đồng ASEAN."
+                            </p>
+                        </div>
+
+                        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+                            <div class="flex items-center justify-between">
+                                <span class="px-3 py-1 bg-blue-600 text-white font-extrabold text-xs rounded-full">Năm 2003</span>
+                                <span class="text-xs font-bold text-slate-500">Tư liệu 3 • SGK Bài 5</span>
+                            </div>
+                            <h4 class="font-extrabold text-slate-900 text-base">Tuyên bố ASEAN II (Tuyên bố Bali II - 2003)</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed bg-slate-50 p-3 rounded-xl border border-slate-200">
+                                "Khẳng định mục tiêu hình thành Cộng đồng ASEAN dựa trên 3 trụ cột: Cộng đồng Chính trị - An ninh, Cộng đồng Kinh tế, và Cộng đồng Văn hóa - Xã hội."
+                            </p>
+                        </div>
+
+                        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+                            <div class="flex items-center justify-between">
+                                <span class="px-3 py-1 bg-purple-600 text-white font-extrabold text-xs rounded-full">Năm 2007</span>
+                                <span class="text-xs font-bold text-slate-500">Tư liệu 4 • SGK Bài 5</span>
+                            </div>
+                            <h4 class="font-extrabold text-slate-900 text-base">Hiến chương ASEAN (Ký năm 2007, hiệu lực năm 2008)</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed bg-slate-50 p-3 rounded-xl border border-slate-200">
+                                "Tạo cơ sở pháp lý và khuôn khổ thể chế để ASEAN trở thành một tổ chức liên chính phủ có tư tác pháp nhân, hướng tới xây dựng Cộng đồng."
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="pt-4 text-center">
+                        <button onclick="completeM1()" class="asean-gradient text-white font-extrabold px-8 py-3 rounded-xl shadow-lg text-sm">
+                            HOÀN THÀNH NHIỆM VỤ 01 (+15 ĐIỂM)
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function checkM1Q(btn, isCorrect) {
+            if (isCorrect) {
+                playSound('correct');
+                btn.className = "w-full text-left p-2.5 text-xs rounded-xl border-2 border-emerald-500 bg-emerald-50 text-emerald-800 font-bold";
+                btn.innerHTML = "✅ Đúng! Tuyên bố Băng Cốc 1967 đặt nền móng ý tưởng ban đầu.";
+            } else {
+                btn.className = "w-full text-left p-2.5 text-xs rounded-xl border-2 border-red-400 bg-red-50 text-red-800 font-bold";
+                btn.innerHTML = "❌ Sai! Tuyên bố Băng Cốc chỉ mới nêu ý tưởng ban đầu (năm 2015 mới chính thức thành lập).";
+            }
+        }
+
+        function completeM1() {
+            if (!appState.completed.m1) {
+                appState.completed.m1 = true;
+                appState.score += 15;
+                playSound('unlock');
+                showToast("🎉 Xuất sắc! Bạn đã mở khóa Nhiệm vụ 02: Mục tiêu xây dựng Cộng đồng!");
+            }
+            closeMissionModal();
+        }
+
+        // MISSION 2 CONTENT: MỤC TIÊU XÂY DỰNG CỘNG ĐỒNG
+        function renderMission2(container) {
+            container.innerHTML = `
+                <div class="space-y-6">
+                    <div class="p-4 bg-amber-50 rounded-2xl border border-amber-200 text-slate-700 text-sm">
+                        <strong class="text-amber-700">Nhiệm vụ:</strong> Chọn đúng các mục tiêu chính xác trong mục <strong>"Mục tiêu xây dựng Cộng đồng ASEAN"</strong> SGK Lịch sử 12.
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div onclick="toggleGoalCard(this, true)" class="p-4 rounded-2xl border-2 border-slate-200 hover:border-amber-500 bg-white cursor-pointer transition space-y-2 group">
+                            <span class="text-xs font-bold text-amber-600">Thẻ Mục tiêu 01</span>
+                            <h4 class="font-bold text-sm text-slate-900">Tổ chức liên chính phủ có liên kết sâu rộng</h4>
+                            <p class="text-xs text-slate-600">Trở thành một tổ chức liên kết sâu rộng hơn và dựa trên cơ sở pháp lý là Hiến chương ASEAN.</p>
+                        </div>
+
+                        <div onclick="toggleGoalCard(this, true)" class="p-4 rounded-2xl border-2 border-slate-200 hover:border-amber-500 bg-white cursor-pointer transition space-y-2 group">
+                            <span class="text-xs font-bold text-amber-600">Thẻ Mục tiêu 02</span>
+                            <h4 class="font-bold text-sm text-slate-900">Đảm bảo Hòa bình & An ninh khu vực</h4>
+                            <p class="text-xs text-slate-600">Đảm bảo hòa bình, an ninh và ổn định lâu dài ở khu vực Đông Nam Á.</p>
+                        </div>
+
+                        <div onclick="toggleGoalCard(this, true)" class="p-4 rounded-2xl border-2 border-slate-200 hover:border-amber-500 bg-white cursor-pointer transition space-y-2 group">
+                            <span class="text-xs font-bold text-amber-600">Thẻ Mục tiêu 03</span>
+                            <h4 class="font-bold text-sm text-slate-900">Tăng trưởng & Hội nhập Kinh tế</h4>
+                            <p class="text-xs text-slate-600">Thúc đẩy tăng trưởng kinh tế, hội nhập khu vực, tạo thị trường chung và cơ sở sản xuất thống nhất.</p>
+                        </div>
+
+                        <div onclick="toggleGoalCard(this, false)" class="p-4 rounded-2xl border-2 border-slate-200 hover:border-red-400 bg-white cursor-pointer transition space-y-2 group">
+                            <span class="text-xs font-bold text-red-500">Thẻ Sai (Không có trong SGK)</span>
+                            <h4 class="font-bold text-sm text-slate-900">Thành lập liên minh quân sự chung</h4>
+                            <p class="text-xs text-slate-600">Thành lập khối phòng thủ quân sự chung chống lại các nước ngoài khu vực.</p>
+                        </div>
+                    </div>
+
+                    <div class="p-5 bg-slate-900 text-white rounded-2xl space-y-2">
+                        <h4 class="font-extrabold text-amber-300 text-sm">💡 KIẾN THỨC CHUẨN SGK LỊCH SỬ 12:</h4>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Mục tiêu tổng quát của Cộng đồng ASEAN là xây dựng một tổ chức hợp tác liên chính phủ liên kết sâu rộng, dựa trên pháp lý Hiến chương ASEAN; đảm bảo hòa bình, an ninh; thúc đẩy tăng trưởng kinh tế thị trường chung; và hướng tới một cộng đồng lấy con người làm trung tâm, thu hẹp khoảng cách phát triển.
+                        </p>
+                    </div>
+
+                    <div class="pt-4 text-center">
+                        <button onclick="completeM2()" class="bg-amber-500 hover:bg-amber-600 text-white font-extrabold px-8 py-3 rounded-xl shadow-lg text-sm">
+                            XÁC NHẬN MỤC TIÊU (+15 ĐIỂM)
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function toggleGoalCard(card, isCorrect) {
+            if (isCorrect) {
+                playSound('correct');
+                card.className = "p-4 rounded-2xl border-2 border-emerald-500 bg-emerald-50 space-y-2 transition";
+            } else {
+                playSound('click');
+                card.className = "p-4 rounded-2xl border-2 border-red-500 bg-red-50 space-y-2 transition";
+                showToast("❌ Sai! ASEAN KHÔNG THÀNH LẬP LIÊN MINH QUÂN SỰ (Phương cách ASEAN ưu tiên đối thoại hòa bình).");
+            }
+        }
+
+        function completeM2() {
+            if (!appState.completed.m2) {
+                appState.completed.m2 = true;
+                appState.score += 15;
+                playSound('unlock');
+                showToast("🎉 Tuyệt vời! Đã mở khóa Nhiệm vụ 03: Kế hoạch xây dựng Cộng đồng!");
+            }
+            closeMissionModal();
+        }
+
+        // MISSION 3 CONTENT: KẾ HOẠCH XÂY DỰNG CỘNG ĐỒNG ASEAN
+        function renderMission3(container) {
+            container.innerHTML = `
+                <div class="space-y-6">
+                    <div class="p-4 bg-blue-50 rounded-2xl border border-blue-200 text-slate-700 text-sm">
+                        <strong class="text-blue-700">Nhiệm vụ:</strong> Khám phá bản đồ kế hoạch hành trình từ Ý TƯỞNG → KẾ HOẠCH → HIỆN THỰC theo đúng các chặng trong SGK.
+                    </div>
+
+                    <div class="relative border-l-4 border-blue-500 ml-4 pl-6 space-y-6">
+                        <div class="relative">
+                            <div class="absolute -left-9 top-0 w-6 h-6 rounded-full bg-blue-500 text-white flex items-center justify-center text-xs font-bold">1</div>
+                            <h4 class="font-extrabold text-slate-900 text-sm">Năm 1998: Chương trình Hành động Hà Nội (HAP)</h4>
+                            <p class="text-xs text-slate-600 mt-1">Cụ thể hóa Tầm nhìn ASEAN 2020, đề ra các biện pháp phục hồi kinh tế sau khủng hoảng tài chính châu Á 1997.</p>
+                        </div>
+
+                        <div class="relative">
+                            <div class="absolute -left-9 top-0 w-6 h-6 rounded-full bg-blue-500 text-white flex items-center justify-center text-xs font-bold">2</div>
+                            <h4 class="font-extrabold text-slate-900 text-sm">Năm 2004: Chương trình Hành động Vientiane (VAP)</h4>
+                            <p class="text-xs text-slate-600 mt-1">Xây dựng lộ trình thực hiện cho từng trụ cột của Cộng đồng ASEAN.</p>
+                        </div>
+
+                        <div class="relative">
+                            <div class="absolute -left-9 top-0 w-6 h-6 rounded-full bg-blue-500 text-white flex items-center justify-center text-xs font-bold">3</div>
+                            <h4 class="font-extrabold text-slate-900 text-sm">Năm 2007: Tuyên bố Cebu (Phi-lip-pin)</h4>
+                            <p class="text-xs text-slate-600 mt-1 bg-amber-50 p-2.5 rounded-xl border border-amber-200 font-semibold text-amber-900">
+                                ⚡ Quyết định quan trọng: Rút ngắn thời hạn thành lập Cộng đồng ASEAN từ năm 2020 xuống năm 2015!
+                            </p>
+                        </div>
+
+                        <div class="relative">
+                            <div class="absolute -left-9 top-0 w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center text-xs font-bold">4</div>
+                            <h4 class="font-extrabold text-slate-900 text-sm">31 - 12 - 2015: Tuyên bố Kuala Lumpur</h4>
+                            <p class="text-xs text-slate-600 mt-1 font-bold text-emerald-700">👉 Chính thức tuyên bố thành lập CỘNG ĐỒNG ASEAN với 10 quốc gia thành viên!</p>
+                        </div>
+                    </div>
+
+                    <div class="pt-4 text-center">
+                        <button onclick="completeM3()" class="bg-blue-600 hover:bg-blue-700 text-white font-extrabold px-8 py-3 rounded-xl shadow-lg text-sm">
+                            HOÀN THÀNH BẢN ĐỒ HÀNH TRÌNH (+15 ĐIỂM)
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function completeM3() {
+            if (!appState.completed.m3) {
+                appState.completed.m3 = true;
+                appState.score += 15;
+                playSound('unlock');
+                showToast("🎉 Đã hoàn thành! Mở khóa Nhiệm vụ TRUNG TÂM 04: Ba Trụ Cột!");
+            }
+            closeMissionModal();
+        }
+
+        // MISSION 4 CONTENT: BA TRỤ CỘT & MINIGAME "GHÉP ĐÚNG - HIỂU SÂU"
+        function renderMission4(container) {
+            container.innerHTML = `
+                <div class="space-y-8">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="p-5 rounded-2xl bg-red-50 border-2 border-red-200 space-y-2">
+                            <div class="w-10 h-10 rounded-xl bg-asean-red text-white flex items-center justify-center text-lg font-bold">🏛️</div>
+                            <h4 class="font-extrabold text-slate-900 text-sm">1. CHÍNH TRỊ - AN NINH (APSC)</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                Đảm bảo các quốc gia sống trong hòa bình, ổn định, không dùng vũ lực hay đe dọa dùng vũ lực; ứng phó an ninh phi truyền thống.
+                            </p>
+                        </div>
+
+                        <div class="p-5 rounded-2xl bg-emerald-50 border-2 border-emerald-200 space-y-2">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center text-lg font-bold">💰</div>
+                            <h4 class="font-extrabold text-slate-900 text-sm">2. KINH TẾ (AEC)</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                Tạo thị trường chung & cơ sở sản xuất thống nhất; 5 lưu chuyển tự do (Hàng hóa, Dịch vụ, Đầu tư, Vốn, Lao động có tay nghề).
+                            </p>
+                        </div>
+
+                        <div class="p-5 rounded-2xl bg-purple-50 border-2 border-purple-200 space-y-2">
+                            <div class="w-10 h-10 rounded-xl bg-purple-600 text-white flex items-center justify-center text-lg font-bold">👨‍👩‍👧‍👦</div>
+                            <h4 class="font-extrabold text-slate-900 text-sm">3. VĂN HÓA - XÃ HỘI (ASCC)</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                Xây dựng cộng đồng lấy con người làm trung tâm, có trách nhiệm xã hội, phát triển con người, bảo tồn bản sắc ASEAN.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="p-6 bg-slate-900 text-white rounded-3xl space-y-6">
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                            <div>
+                                <span class="text-xs font-bold text-yellow-400 uppercase tracking-wider block">TRÒ CHƠI TỔNG HỢP</span>
+                                <h3 class="text-lg font-extrabold text-white">🧩 GHÉP ĐÚNG - HIỂU SÂU</h3>
+                            </div>
+                            <span class="text-xs font-bold bg-white/10 px-3 py-1 rounded-full text-slate-300">Phân loại kiến thức SGK</span>
+                        </div>
+
+                        <p class="text-xs text-slate-300">
+                            Hãy click vào từng nội dung bên trái, sau đó chọn Trụ cột tương ứng ở bên phải để xếp vào đúng vị trí!
+                        </p>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="game-container">
+                            <div class="space-y-3" id="game-items">
+                                <div onclick="selectGameItem(this, 'APSC')" class="game-item p-3 rounded-xl bg-slate-800 border border-slate-700 hover:border-yellow-400 cursor-pointer text-xs font-semibold text-slate-200 transition">
+                                    📜 Tuyên bố về ứng xử các bên ở Biển Đông (DOC) và Bộ quy tắc COCs
+                                </div>
+                                <div onclick="selectGameItem(this, 'AEC')" class="game-item p-3 rounded-xl bg-slate-800 border border-slate-700 hover:border-yellow-400 cursor-pointer text-xs font-semibold text-slate-200 transition">
+                                    🚚 Tự do lưu chuyển hàng hóa, dịch vụ và lao động có tay nghề
+                                </div>
+                                <div onclick="selectGameItem(this, 'ASCC')" class="game-item p-3 rounded-xl bg-slate-800 border border-slate-700 hover:border-yellow-400 cursor-pointer text-xs font-semibold text-slate-200 transition">
+                                    🎓 Hợp tác giáo dục, nâng cao chất lượng cuộc sống và bảo vệ môi trường
+                                </div>
+                                <div onclick="selectGameItem(this, 'APSC')" class="game-item p-3 rounded-xl bg-slate-800 border border-slate-700 hover:border-yellow-400 cursor-pointer text-xs font-semibold text-slate-200 transition">
+                                    🕊️ Hiệp ước Khu vực Đông Nam Á không có vũ khí hạt nhân (SEANWFZ)
+                                </div>
+                            </div>
+
+                            <div class="space-y-3">
+                                <div id="target-APSC" class="p-3 rounded-xl border-2 border-dashed border-red-500/50 bg-red-950/20 space-y-1">
+                                    <div class="text-xs font-bold text-red-400">🏛️ Trụ cột Chính trị - An ninh (APSC)</div>
+                                    <div class="matched-box text-[11px] text-slate-400 italic">Chưa ghép nội dung nào</div>
+                                </div>
+                                <div id="target-AEC" class="p-3 rounded-xl border-2 border-dashed border-emerald-500/50 bg-emerald-950/20 space-y-1">
+                                    <div class="text-xs font-bold text-emerald-400">💰 Trụ cột Kinh tế (AEC)</div>
+                                    <div class="matched-box text-[11px] text-slate-400 italic">Chưa ghép nội dung nào</div>
+                                </div>
+                                <div id="target-ASCC" class="p-3 rounded-xl border-2 border-dashed border-purple-500/50 bg-purple-950/20 space-y-1">
+                                    <div class="text-xs font-bold text-purple-400">👨‍👩‍👧‍👦 Trụ cột Văn hóa - Xã hội (ASCC)</div>
+                                    <div class="matched-box text-[11px] text-slate-400 italic">Chưa ghép nội dung nào</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="hierarchy-diagram" class="hidden p-4 bg-slate-800 rounded-2xl text-center space-y-2 border border-slate-700">
+                            <span class="text-xs font-bold text-emerald-400">SƠ ĐỒ CẤU TRÚC CỘNG ĐỒNG ASEAN</span>
+                            <div class="font-mono text-xs text-yellow-300 leading-tight">
+                                CỘNG ĐỒNG ASEAN<br>
+                                │<br>
+                                ┌──────────────────────┼──────────────────────┐<br>
+                                │                      │                      │<br>
+                                CHÍNH TRỊ - AN NINH      KINH TẾ          VĂN HÓA - XÃ HỘI
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-2 text-center">
+                        <button onclick="completeM4()" class="asean-gradient text-white font-extrabold px-8 py-3 rounded-xl shadow-lg text-sm">
+                            HOÀN THÀNH NHIỆM VỤ 04 (+25 ĐIỂM)
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        let selectedItemPillar = null;
+        let selectedItemElem = null;
+
+        function selectGameItem(elem, correctPillar) {
+            playSound('click');
+            selectedItemPillar = correctPillar;
+            selectedItemElem = elem;
+
+            const target = document.getElementById(`target-${correctPillar}`);
+            if (target) {
+                playSound('correct');
+                target.classList.add('bg-yellow-400/20');
+                const box = target.querySelector('.matched-box');
+                box.innerHTML = `<span class="text-yellow-300 font-bold">✅ Đã ghép đúng: ${elem.innerText}</span>`;
+                elem.style.display = 'none';
+
+                const remaining = document.querySelectorAll('.game-item:not([style*="display: none"])');
+                if (remaining.length === 0) {
+                    document.getElementById('hierarchy-diagram').classList.remove('hidden');
+                    showToast("🎉 Hoàn thành Minigame! Sơ đồ cấu trúc Cộng đồng đã hiển thị.");
+                }
+            }
+        }
+
+        function completeM4() {
+            if (!appState.completed.m4) {
+                appState.completed.m4 = true;
+                appState.score += 25;
+                playSound('unlock');
+                showToast("🎉 Tuyệt vời! Bạn đã mở khóa Nhiệm vụ 05: ASEAN sau năm 2015!");
+            }
+            closeMissionModal();
+        }
+
+        // MISSION 5 CONTENT: CỘNG ĐỒNG ASEAN SAU NĂM 2015
+        function renderMission5(container) {
+            container.innerHTML = `
+                <div class="space-y-6">
+                    <div class="p-4 bg-indigo-50 rounded-2xl border border-indigo-200 text-slate-700 text-sm">
+                        <strong class="text-indigo-700">Nhiệm vụ:</strong> Mở 3 cửa điều hành để tìm hiểu Thành tựu 🏆, Thách thức ⚠️ và Triển vọng 🚀 của ASEAN sau năm 2015.
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+                        <div class="bg-white p-5 rounded-2xl border-2 border-emerald-200 shadow-sm space-y-3">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-lg font-bold">🏆</div>
+                            <h4 class="font-extrabold text-slate-900 text-base">1. THÀNH TỰU NỔI BẬT</h4>
+                            <ul class="text-xs text-slate-600 space-y-2 list-disc pl-4">
+                                <li>Duy trì môi trường hòa bình, ổn định ở Đông Nam Á.</li>
+                                <li>Kinh tế tăng trưởng năng động, ký kết Hiệp định RCEP (2020).</li>
+                                <li>Khẳng định vai trò trung tâm của ASEAN trong các cơ chế khu vực (ARF, EAS, EAS+3).</li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-white p-5 rounded-2xl border-2 border-amber-200 shadow-sm space-y-3">
+                            <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center text-lg font-bold">⚠️</div>
+                            <h4 class="font-extrabold text-slate-900 text-base">2. THÁCH THỨC THỰC TẾ</h4>
+                            <ul class="text-xs text-slate-600 space-y-2 list-disc pl-4">
+                                <li>Chênh lệch trình độ phát triển giữa các nước thành viên.</li>
+                                <li>Đa dạng về thể chế chính trị, văn hóa, tôn giáo.</li>
+                                <li>Cạnh tranh địa - chính trị gay gắt giữa các nước lớn tại khu vực.</li>
+                                <li>An ninh phi truyền thống (biến đổi khí hậu, an ninh mạng, dịch bệnh).</li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-white p-5 rounded-2xl border-2 border-blue-200 shadow-sm space-y-3">
+                            <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-lg font-bold">🚀</div>
+                            <h4 class="font-extrabold text-slate-900 text-base">3. TRIỂN VỌNG TƯƠNG LAI</h4>
+                            <ul class="text-xs text-slate-600 space-y-2 list-disc pl-4">
+                                <li>Thực hiện Tầm nhìn Cộng đồng ASEAN 2025 và xây dựng Tầm nhìn sau 2025.</li>
+                                <li>Đẩy mạnh chuyển đổi số, kinh tế xanh, phát triển bền vững.</li>
+                                <li>Hội nhập sâu rộng và nâng cao năng lực tự cường khu vực.</li>
+                            </ul>
+                        </div>
+
+                    </div>
+
+                    <div class="pt-4 text-center">
+                        <button onclick="completeM5()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold px-8 py-3 rounded-xl shadow-lg text-sm">
+                            HOÀN THÀNH NHIỆM VỤ 05 (+15 ĐIỂM)
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function completeM5() {
+            if (!appState.completed.m5) {
+                appState.completed.m5 = true;
+                appState.score += 15;
+                playSound('unlock');
+                showToast("🎉 Đã hoàn thành toàn bộ 5 Nhiệm vụ! Mở khóa Phần Luyện tập.");
+            }
+            closeMissionModal();
+        }
+
+        // SECTION XVII: KIỂM TRA NĂNG LỰC ĐẠI SỨ (10 CÂU TRẮC NGHIỆM SGK BÀI 5)
+        const quizData = [
+            {
+                q: "Ý tưởng đầu tiên về một cộng đồng hòa bình và thịnh vượng ở Đông Nam Á được đề cập lần đầu trong văn kiện nào?",
+                options: ["Tuyên bố Băng Cốc (1967)", "Hiệp ước Bali (1976)", "Hiến chương ASEAN (2007)", "Tuyên bố Cebu (2007)"],
+                answer: 0,
+                explain: "Tuyên bố Băng Cốc (8-1967) nêu ý tưởng ban đầu về một cộng đồng hòa bình và thịnh vượng."
+            },
+            {
+                q: "Cộng đồng ASEAN chính thức được thành lập vào mốc thời gian lịch sử nào?",
+                options: ["8 - 8 - 1967", "24 - 2 - 1976", "31 - 12 - 2015", "11 - 11 - 2020"],
+                answer: 2,
+                explain: "Cộng đồng ASEAN chính thức được tuyên bố thành lập ngày 31-12-2015."
+            },
+            {
+                q: "Văn kiện nào sau đây tạo cơ sở pháp lý và khuôn khẩu thể chế cho Cộng đồng ASEAN?",
+                options: ["Hiến chương ASEAN (2007)", "Tuyên bố Bali II (2003)", "Chương trình Hà Nội (1998)", "Tuyên bố Cebu (2007)"],
+                answer: 0,
+                explain: "Hiến chương ASEAN (2007) tạo cơ sở pháp lý và khuôn khổ thể chế chính thức."
+            },
+            {
+                q: "Cộng đồng ASEAN được xây dựng dựa trên mấy trụ cột chính?",
+                options: ["2 trụ cột", "3 trụ cột", "4 trụ cột", "5 trụ cột"],
+                answer: 1,
+                explain: "Cộng đồng ASEAN gồm 3 trụ cột: Chính trị - An ninh (APSC), Kinh tế (AEC), và Văn hóa - Xã hội (ASCC)."
+            },
+            {
+                q: "Yếu tố nào sau đây KHÔNG thuộc 5 lưu chuyển tự do của Cộng đồng Kinh tế ASEAN (AEC)?",
+                options: ["Tự do lưu chuyển hàng hóa", "Tự do lưu chuyển quân sự", "Tự do lưu chuyển lao động có tay nghề", "Tự do lưu chuyển vốn"],
+                answer: 1,
+                explain: "AEC chỉ tự do lưu chuyển hàng hóa, dịch vụ, đầu tư, vốn, và lao động có tay nghề (không có quân sự)."
+            },
+            {
+                q: "Tuyên bố Cebu (2007) có quyết định quan trọng nào?",
+                options: ["Chính thức kết nạp Đông Ti-mo", "Thành lập liên minh tiền tệ chung", "Rút ngắn thời hạn thành lập Cộng đồng ASEAN từ năm 2020 xuống năm 2015", "Giải thể tổ chức ASEAN"],
+                answer: 2,
+                explain: "Tuyên bố Cebu (2007) rút ngắn thời hạn thành lập Cộng đồng xuống năm 2015."
+            },
+            {
+                q: "Thách thức nào sau đây xuất phát từ sự chênh lệch trong nội bộ các nước ASEAN?",
+                options: ["Chênh lệch trình độ phát triển kinh tế giữa các thành viên", "Sự đe doạ từ chiến tranh hạt nhân toàn cầu", "Khủng hoảng năng lượng vũ trụ", "Sự đồng nhất tuyệt đối về văn hóa"],
+                answer: 0,
+                explain: "Sự chênh lệch trình độ phát triển (ví dụ giữa nhóm CLMV và các nước phát triển hơn) là thách thức lớn."
+            },
+            {
+                q: "Một trong những nguyên tắc cốt lõi của Cộng đồng Chính trị - An ninh ASEAN (APSC) là gì?",
+                options: ["Sử dụng lực lượng quân sự để can thiệp nội bộ", "Giải quyết các tranh chấp bằng biện pháp hòa bình", "Áp đặt chính chế một đảng cho tất cả thành viên", "Xây dựng căn cứ quân sự dùng chung"],
+                answer: 1,
+                explain: "APSC ưu tiên tôn trọng chủ quyền và giải quyết tranh chấp bằng biện pháp hòa bình."
+            },
+            {
+                q: "Trụ cột nào của Cộng đồng ASEAN nhấn mạnh mục tiêu 'Lấy con người làm trung tâm'?",
+                options: ["Cộng đồng Kinh tế (AEC)", "Cộng đồng Văn hóa - Xã hội (ASCC)", "Cộng đồng Chính trị - An ninh (APSC)", "Diễn đàn Khu vực ASEAN (ARF)"],
+                answer: 1,
+                explain: "Cộng đồng Văn hóa - Xã hội (ASCC) lấy con người làm trung tâm và có trách nhiệm xã hội."
+            },
+            {
+                q: "Triển vọng phát triển của ASEAN sau năm 2015 gắn liền với xu hướng quan trọng nào?",
+                options: ["Đẩy mạnh chuyển đổi số, kinh tế xanh và phát triển bền vững", "Rút lui khỏi quan hệ kinh tế thương mại quốc tế", "Giảm hợp tác nội khối để tập trung riêng lẻ", "Chỉ chú trọng phát triển công nghiệp nặng"],
+                answer: 0,
+                explain: "ASEAN tập trung chuyển đổi số, kinh tế xanh, kinh tế tuần hoàn và phát triển bền vững."
+            }
+        ];
+
+        function renderLuyenTap(container) {
+            let html = `
+                <div class="space-y-6">
+                    <div class="p-4 bg-slate-100 rounded-2xl border border-slate-300 text-slate-800 text-xs sm:text-sm font-semibold">
+                        🧠 Hãy hoàn thành 10 câu trắc nghiệm để tích lũy tối đa <strong>10 điểm</strong> Luyện tập.
+                    </div>
+                    <div class="space-y-6">
+            `;
+
+            quizData.forEach((item, idx) => {
+                html += `
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+                        <h4 class="font-extrabold text-slate-900 text-sm">Câu ${idx + 1}: ${item.q}</h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            ${item.options.map((opt, oIdx) => `
+                                <button onclick="answerQuiz(this, ${idx}, ${oIdx})" class="quiz-opt-${idx} text-left p-3 text-xs rounded-xl border border-slate-200 hover:border-asean-red transition font-medium text-slate-700">
+                                    ${String.fromCharCode(65 + oIdx)}. ${opt}
+                                </button>
+                            `).join('')}
+                        </div>
+                        <div id="quiz-explain-${idx}" class="hidden p-3 rounded-xl bg-slate-50 text-xs text-slate-600 border border-slate-200 mt-2"></div>
+                    </div>
+                `;
+            });
+
+            html += `
+                    </div>
+                    <div class="pt-4 text-center">
+                        <button onclick="completeLuyenTap()" class="bg-slate-900 hover:bg-black text-white font-extrabold px-8 py-3 rounded-xl shadow-lg text-sm">
+                            HOÀN THÀNH BÀI LUYỆN TẬP (+10 ĐIỂM)
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            container.innerHTML = html;
+        }
+
+        function answerQuiz(btn, qIdx, selectedOpt) {
+            const item = quizData[qIdx];
+            const opts = document.querySelectorAll(`.quiz-opt-${qIdx}`);
+            opts.forEach(o => o.disabled = true);
+
+            const explain = document.getElementById(`quiz-explain-${qIdx}`);
+            explain.classList.remove('hidden');
+
+            if (selectedOpt === item.answer) {
+                playSound('correct');
+                btn.className = "text-left p-3 text-xs rounded-xl border-2 border-emerald-500 bg-emerald-50 text-emerald-800 font-bold";
+                explain.innerHTML = `✅ <strong class="text-emerald-700">Đúng!</strong> ${item.explain}`;
+            } else {
+                playSound('click');
+                btn.className = "text-left p-3 text-xs rounded-xl border-2 border-red-500 bg-red-50 text-red-800 font-bold";
+                explain.innerHTML = `❌ <strong class="text-red-700">Chưa chính xác!</strong> Đáp án đúng là ${String.fromCharCode(65 + item.answer)}. ${item.explain}`;
+            }
+        }
+
+        function completeLuyenTap() {
+            if (!appState.completed.luyentap) {
+                appState.completed.luyentap = true;
+                appState.score += 10;
+                playSound('unlock');
+                showToast("🎉 Hoàn thành phần Luyện tập! Mở khóa Nhiệm vụ Vận dụng!");
+            }
+            closeMissionModal();
+        }
+
+        // SECTION XVIII: NHIỆM VỤ VẬN DỤNG CỦA ĐẠI SỨ TRẺ
+        function renderVanDung(container) {
+            container.innerHTML = `
+                <div class="space-y-6">
+                    <div class="p-4 bg-red-50 rounded-2xl border border-red-200 text-slate-800 text-sm space-y-2">
+                        <h4 class="font-extrabold text-asean-red">🎖️ ĐỀ BÀI VẬN DỤNG (SGK LỊCH SỬ 12 BÀI 5):</h4>
+                        <p class="text-xs text-slate-700 leading-relaxed">
+                            "Là một học sinh THPT, em có thể làm gì để góp phần xây dựng một Cộng đồng ASEAN gắn kết, hòa bình, hữu nghị và phát triển bền vững?"
+                        </p>
+                    </div>
+
+                    <div class="space-y-3">
+                        <label class="block text-xs font-bold text-slate-700">Nhập bài viết ngắn / Đề xuất đề tài (100 - 200 từ):</label>
+                        <textarea id="vandung-input" rows="6" placeholder="Ví dụ: Tích cực học tập ngoại ngữ; tham gia các hoạt động giao lưu thanh niên ASEAN; tìm hiểu và lan tỏa giá trị bản sắc văn hóa các nước thành viên; nâng cao nhận thức về phát triển bền vững và bảo vệ môi trường..." class="w-full p-4 text-xs rounded-2xl border-2 border-slate-200 focus:border-asean-red focus:outline-none leading-relaxed"></textarea>
+                    </div>
+
+                    <div class="pt-2 text-center">
+                        <button onclick="submitVanDung()" class="asean-gradient text-white font-extrabold px-8 py-3.5 rounded-xl shadow-lg text-sm">
+                            NỘP BÀI VẬN DỤNG & NHẬN BẰNG ĐẠI SỨ (+5 ĐIỂM)
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function submitVanDung() {
+            const val = document.getElementById('vandung-input').value.trim();
+            if (val.length < 20) {
+                showToast("⚠️ Vui lòng nhập nội dung đề xuất ngắn ít nhất 20 ký tự!");
+                return;
+            }
+
+            if (!appState.completed.vandung) {
+                appState.completed.vandung = true;
+                appState.score += 5;
+            }
+
+            playSound('unlock');
+            closeMissionModal();
+
+            document.getElementById('cert-score').innerText = `${appState.score}/100`;
+            document.getElementById('certificate-modal').classList.remove('hidden');
+        }
+
+        function closeCertModal() {
+            playSound('click');
+            document.getElementById('certificate-modal').classList.add('hidden');
+            updateUI();
+        }
+
+        // Initialize UI state on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            updateUI();
+        });
+    </script>
+</body>
+</html>
