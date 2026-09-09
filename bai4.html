@@ -3,136 +3,1734 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lịch sử 12 - Bài 4: ASEAN từ 5 đến 10</title>
+    <title>ASEAN – Hành trình từ ASEAN 5 đến ASEAN 10 | SGK Lịch sử 12</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome -->
+    <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- QRCode.js Library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <!-- Google Fonts Inter & Playfair Display -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Merriweather:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        asean: {
+                            blue: '#003399',
+                            red: '#CC0000',
+                            yellow: '#FFCC00',
+                            gold: '#D4AF37',
+                            darkBlue: '#0A192F',
+                            lightBg: '#F4F7FA'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Merriweather', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+
     <style>
         body {
-            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 50%, #e0e7ff 100%);
             min-height: 100vh;
+            user-select: none;
+            overflow-x: hidden;
         }
-        .glass-card {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+
+        /* 3D Flipbook Effect */
+        .book-container {
+            perspective: 2000px;
+        }
+
+        .book-page {
+            transition: transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 0.5s ease;
+            transform-style: preserve-3d;
+            backface-visibility: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1), 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .page-shadow {
+            box-shadow: inset -10px 0 20px -10px rgba(0,0,0,0.1);
+        }
+
+        /* Card Flip 3D */
+        .flip-card {
+            background-color: transparent;
+            perspective: 1000px;
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 0.75rem;
+        }
+
+        .flip-card-back {
+            transform: rotateY(180deg);
+        }
+
+        /* Doors Effect for Stage 7 */
+        .stage-door {
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-origin: left center;
+        }
+
+        .door-container.open .stage-door {
+            transform: rotateY(-110deg);
+        }
+
+        /* Drag & Drop */
+        .draggable {
+            cursor: grab;
+            touch-action: none;
+        }
+        .draggable:active {
+            cursor: grabbing;
+        }
+        .dropzone.highlight {
+            border-color: #3b82f6;
+            background-color: rgba(59, 130, 246, 0.15);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.1);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #003399;
+            border-radius: 4px;
+        }
+
+        /* Pulse Highlight */
+        @keyframes flagPulse {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(255, 204, 0, 0.8)); }
+            50% { transform: scale(1.15); filter: drop-shadow(0 0 15px rgba(255, 204, 0, 1)); }
+        }
+        .active-country {
+            animation: flagPulse 1.8s infinite ease-in-out;
+            fill-opacity: 0.95 !important;
+        }
+
+        /* Glassmorphism */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
         }
     </style>
 </head>
-<body class="text-slate-100 font-sans flex flex-col justify-between p-4 md:p-8">
+<body class="text-slate-800 font-sans flex flex-col justify-between min-h-screen">
 
-    <!-- HEADER SECTION -->
-    <header class="max-w-4xl mx-auto w-full text-center my-4">
-        <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-blue-900/60 border border-blue-500/30 rounded-full text-xs font-semibold text-amber-400 mb-3 uppercase tracking-widest">
-            <i class="fa-solid fa-graduation-cap"></i> SGK Lịch Sử 12 • Kết Nối Tri Thức
+    <!-- HEADER BAR -->
+    <header class="bg-asean-blue text-white shadow-lg border-b border-blue-900 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-2 flex flex-wrap justify-between items-center gap-2">
+            <!-- Brand -->
+            <div class="flex items-center space-x-3">
+                <div class="w-9 h-9 bg-asean-yellow rounded-full flex items-center justify-center text-asean-blue font-bold shadow-md">
+                    <i class="fa-solid me-0 fa-globe text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-sm md:text-base leading-tight text-asean-yellow uppercase tracking-wide">
+                        LỊCH SỬ 12 • CHỦ ĐỀ 2
+                    </h1>
+                    <p class="text-xs text-blue-100">ASEAN: Hành trình từ ASEAN 5 đến ASEAN 10</p>
+                </div>
+            </div>
+
+            <!-- Global Progress Bar -->
+            <div class="flex items-center space-x-3 bg-blue-900/60 px-4 py-1.5 rounded-full border border-blue-700/50">
+                <i class="fa-solid fa-award text-asean-yellow"></i>
+                <div class="w-24 md:w-36 bg-blue-950 rounded-full h-2.5 overflow-hidden">
+                    <div id="progress-bar" class="bg-gradient-to-r from-asean-yellow via-amber-400 to-green-400 h-2.5 rounded-full transition-all duration-500" style="width: 8.33%;"></div>
+                </div>
+                <span id="progress-text" class="text-xs font-semibold text-asean-yellow min-w-[3rem] text-right">8%</span>
+            </div>
+
+            <!-- Quick Action Toolbar -->
+            <div class="flex items-center space-x-2">
+                <button id="btn-badges" onclick="openBadgeModal()" class="px-2.5 py-1 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 rounded-lg text-xs font-medium border border-amber-500/40 flex items-center gap-1.5 transition">
+                    <i class="fa-solid fa-medal text-asean-yellow"></i>
+                    <span class="hidden sm:inline">Huy hiệu</span>
+                    <span id="badge-count" class="bg-amber-500 text-slate-900 font-bold px-1.5 py-0.2 text-[10px] rounded-full">0/10</span>
+                </button>
+
+                <button id="btn-toc" onclick="openTocModal()" class="p-1.5 bg-blue-800 hover:bg-blue-700 rounded-lg text-xs font-medium transition text-slate-200" title="Mục lục">
+                    <i class="fa-solid fa-list-ol text-sm"></i>
+                </button>
+
+                <button id="btn-sound" onclick="toggleSound()" class="p-1.5 bg-blue-800 hover:bg-blue-700 rounded-lg text-xs font-medium transition text-slate-200" title="Âm thanh ON/OFF">
+                    <i id="sound-icon" class="fa-solid fa-volume-high text-sm text-green-400"></i>
+                </button>
+
+                <button onclick="toggleFullscreen()" class="p-1.5 bg-blue-800 hover:bg-blue-700 rounded-lg text-xs font-medium transition text-slate-200" title="Toàn màn hình">
+                    <i class="fa-solid fa-expand text-sm"></i>
+                </button>
+            </div>
         </div>
-        <h1 class="text-2xl md:text-4xl font-extrabold text-amber-400 tracking-tight leading-tight uppercase">
-            Cổng Học Tập Tương Tác: Lịch Sử ASEAN
-        </h1>
-        <p class="text-xs md:text-base text-slate-300 mt-2 max-w-2xl mx-auto">
-            Bài 4: Sự ra đời và phát triển của Hiệp hội các quốc gia Đông Nam Á (ASEAN)
-        </p>
     </header>
 
-    <!-- MAIN ACCESS CARD WITH QR CODE -->
-    <main class="max-w-3xl mx-auto w-full glass-card rounded-3xl p-6 md:p-10 shadow-2xl my-auto text-center border border-amber-500/20">
-        <div class="space-y-6">
-            <div>
-                <h2 class="text-lg md:text-xl font-bold text-white uppercase tracking-wide">
-                    Quét Mã QR Để Vào Học Trực Tuyến
-                </h2>
-                <p class="text-xs md:text-sm text-slate-400 mt-1">
-                    Học sinh sử dụng Điện thoại/Máy tính bảng quét mã bên dưới để tham gia bài học tương tác 12 trạm.
-                </p>
-            </div>
+    <!-- MAIN FLIPBOOK CONTAINER -->
+    <main class="flex-1 flex items-center justify-center p-2 sm:p-4 md:p-6 my-auto">
+        <div class="w-full max-w-5xl aspect-[16/10] min-h-[550px] md:min-h-[620px] book-container relative flex justify-center">
+            
+            <!-- Dynamic 12 Book Pages Container -->
+            <div id="book" class="w-full h-full relative flex items-center justify-center">
+                
+                <!-- PAGE 1: COVER -->
+                <section id="page-1" class="book-page active-page w-full h-full glass-panel rounded-2xl shadow-2xl p-6 md:p-8 flex flex-col justify-between border-2 border-asean-yellow/80 relative overflow-hidden bg-gradient-to-br from-sky-50 via-blue-50 to-amber-50 text-slate-800">
+                    <div class="absolute -top-24 -right-24 w-96 h-96 bg-blue-200/40 rounded-full blur-3xl pointer-events-none"></div>
+                    <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-amber-200/40 rounded-full blur-3xl pointer-events-none"></div>
 
-            <!-- QR CODE DISPLAY CONTAINER -->
-            <div class="flex justify-center my-4">
-                <div class="p-4 bg-white rounded-2xl shadow-xl border-4 border-amber-400 inline-block">
-                    <div id="qrcode" class="flex justify-center items-center"></div>
-                </div>
-            </div>
-
-            <!-- LINK INPUT & DIRECT ACCESS BUTTON -->
-            <div class="space-y-3 max-w-lg mx-auto">
-                <div class="flex flex-col sm:flex-row gap-2">
-                    <input type="text" id="target-url" value="bai4lop12.html" class="flex-1 bg-slate-900/90 text-amber-300 border border-slate-700 rounded-xl px-4 py-2.5 text-xs md:text-sm focus:border-amber-400 focus:outline-none text-center sm:text-left font-mono" placeholder="Nhập liên kết bài học...">
-                    <button onclick="updateQRCode()" class="px-5 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-xl text-xs md:text-sm transition flex items-center justify-center gap-2 shadow">
-                        <i class="fa-solid fa-sync"></i> Cập Nhật Mã
-                    </button>
-                </div>
-
-                <a id="direct-link" href="bai4lop12.html" target="_blank" class="w-full inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold rounded-xl text-xs md:text-sm shadow-lg shadow-blue-500/25 transition">
-                    <span>VÀO BÀI HỌC TRỰC TIẾP</span>
-                    <i class="fa-solid fa-arrow-right"></i>
-                </a>
-            </div>
-
-            <!-- CLASSROOM INSTRUCTIONS -->
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-left pt-4 border-t border-slate-700/60 text-xs">
-                <div class="bg-slate-800/50 p-3 rounded-xl border border-slate-700/50">
-                    <div class="text-amber-400 font-bold mb-1 flex items-center gap-1.5">
-                        <i class="fa-solid fa-qrcode"></i> Bước 1:
+                    <div class="flex justify-between items-start z-10">
+                        <span class="px-3 py-1 bg-asean-blue text-white rounded-full border border-asean-yellow text-xs font-semibold tracking-widest uppercase shadow-sm">
+                            SGK Lịch sử 12 • Bộ sách Kết nối tri thức
+                        </span>
+                        <span class="text-xs font-medium text-slate-500 bg-white/80 px-2 py-1 rounded-md border border-slate-200">Trạm 1 / 12</span>
                     </div>
-                    <span class="text-slate-300">Quét mã QR bằng ứng dụng Camera hoặc Zalo.</span>
-                </div>
-                <div class="bg-slate-800/50 p-3 rounded-xl border border-slate-700/50">
-                    <div class="text-amber-400 font-bold mb-1 flex items-center gap-1.5">
-                        <i class="fa-solid fa-gamepad"></i> Bước 2:
+
+                    <div class="text-center z-10 my-auto py-2">
+                        <!-- Official ASEAN Emblem -->
+                        <div class="relative w-28 h-28 mx-auto mb-4 flex items-center justify-center">
+                            <div class="absolute inset-0 bg-asean-yellow rounded-full animate-ping opacity-20"></div>
+                            <svg class="w-24 h-24 shadow-xl rounded-full border-2 border-white" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="50" cy="50" r="48" fill="#003399" />
+                                <circle cx="50" cy="50" r="42" fill="#CC0000" />
+                                <circle cx="50" cy="50" r="32" fill="#FFCC00" />
+                                <g fill="#003399">
+                                    <path d="M42 30 h16 v40 h-16 z" rx="2"/>
+                                    <path d="M38 34 h24 v32 h-24 z" rx="2"/>
+                                    <path d="M46 26 h8 v48 h-8 z" rx="2"/>
+                                </g>
+                                <circle cx="50" cy="50" r="48" fill="none" stroke="#FFFFFF" stroke-width="2"/>
+                            </svg>
+                        </div>
+
+                        <h1 class="text-2xl md:text-4xl font-extrabold font-serif text-asean-blue mb-2 tracking-wide leading-tight drop-shadow-sm">
+                            ASEAN: NHỮNG CHẶNG ĐƯỜNG LỊCH SỬ
+                        </h1>
+                        <h2 class="text-sm md:text-lg font-semibold text-slate-700 max-w-2xl mx-auto mb-6">
+                            Bài 4: Sự ra đời và phát triển của Hiệp hội các quốc gia Đông Nam Á (ASEAN)
+                        </h2>
+
+                        <!-- Role Quest Tag -->
+                        <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-white border border-amber-300 rounded-xl text-slate-800 text-xs md:text-sm shadow-sm">
+                            <i class="fa-solid fa-user-ninja text-amber-500"></i>
+                            <span>Nhiệm vụ: <strong>Phóng viên trẻ khám phá Lịch sử ASEAN</strong></span>
+                        </div>
                     </div>
-                    <span class="text-slate-300">Khám phá 12 trạm tương tác, Flipbook 3D & Bản đồ số.</span>
-                </div>
-                <div class="bg-slate-800/50 p-3 rounded-xl border border-slate-700/50">
-                    <div class="text-amber-400 font-bold mb-1 flex items-center gap-1.5">
-                        <i class="fa-solid fa-trophy"></i> Bước 3:
+
+                    <div class="text-center z-10">
+                        <button onclick="nextPage()" class="group relative inline-flex items-center gap-3 px-8 py-3 bg-gradient-to-r from-asean-blue to-indigo-700 text-white font-bold text-base rounded-full shadow-lg shadow-blue-500/30 hover:scale-105 active:scale-95 transition-all duration-300">
+                            <span>BẮT ĐẦU HÀNH TRÌNH</span>
+                            <i class="fa-solid fa-circle-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                        </button>
                     </div>
-                    <span class="text-slate-300">Hoàn thành thử thách & thu thập đủ 10 Huy hiệu ASEAN.</span>
-                </div>
+                </section>
+
+                <!-- PAGE 2: KHỞI ĐỘNG -->
+                <section id="page-2" class="book-page hidden w-full h-full bg-white rounded-2xl shadow-2xl p-6 md:p-8 flex flex-col justify-between border border-slate-200 relative overflow-y-auto">
+                    <div>
+                        <div class="flex justify-between items-center mb-4 border-b border-slate-200 pb-3">
+                            <div class="flex items-center gap-2 text-asean-blue font-bold text-sm uppercase tracking-wider">
+                                <span class="w-7 h-7 bg-asean-blue text-white rounded-lg flex items-center justify-center text-xs">02</span>
+                                <span>Trạm 2: Bối cảnh ra đời</span>
+                            </div>
+                            <span class="text-xs text-slate-400">Trang 2 / 12</span>
+                        </div>
+
+                        <div class="max-w-3xl mx-auto space-y-4">
+                            <div class="bg-blue-50 border-l-4 border-asean-blue p-4 rounded-r-xl">
+                                <h3 class="font-bold text-asean-blue text-base md:text-lg mb-1">
+                                    <i class="fa-solid fa-compass text-amber-500 mr-2"></i>Tình huống dành cho Phóng viên trẻ:
+                                </h3>
+                                <p class="text-slate-700 text-sm leading-relaxed">
+                                    Sau Chiến tranh thế giới thứ hai, khu vực Đông Nam Á chịu tác động của Chiến tranh lạnh và sự tranh giành ảnh hưởng của các nước lớn. Trong bối cảnh đó, các quốc gia trong khu vực cần chọn hướng đi nào để cùng tồn tại, bảo vệ độc lập và phát triển?
+                                </p>
+                            </div>
+
+                            <div class="space-y-3 pt-2">
+                                <p class="font-semibold text-slate-800 text-sm">Hãy chọn quyết định đúng đắn nhất của các quốc gia Đông Nam Á:</p>
+
+                                <button onclick="checkPage2(this, false)" class="w-full text-left p-3.5 rounded-xl border border-slate-200 hover:border-slate-400 hover:bg-slate-50 transition text-sm flex items-start gap-3">
+                                    <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">A</span>
+                                    <span>Liên minh quân sự với một siêu quốc gia bên ngoài để được bảo hộ an ninh tuyệt đối.</span>
+                                </button>
+
+                                <button onclick="checkPage2(this, true)" class="w-full text-left p-3.5 rounded-xl border border-slate-200 hover:border-slate-400 hover:bg-slate-50 transition text-sm flex items-start gap-3">
+                                    <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">B</span>
+                                    <span>Bắt tay liên kết, hợp tác khu vực về kinh tế - xã hội để tạo sức mạnh tập thể và giữ vững hòa bình.</span>
+                                </button>
+
+                                <button onclick="checkPage2(this, false)" class="w-full text-left p-3.5 rounded-xl border border-slate-200 hover:border-slate-400 hover:bg-slate-50 transition text-sm flex items-start gap-3">
+                                    <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">C</span>
+                                    <span>Đóng cửa phát triển độc lập, không tham gia bất kỳ tổ chức hay liên kết hợp tác nào.</span>
+                                </button>
+                            </div>
+
+                            <!-- Feedback box -->
+                            <div id="page2-feedback" class="hidden p-4 rounded-xl border text-sm transition-all duration-300"></div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center pt-4 border-t border-slate-200">
+                        <button onclick="prevPage()" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg font-medium text-xs md:text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-arrow-left"></i> Trang trước
+                        </button>
+                        <button id="page2-next" onclick="nextPage()" disabled class="px-5 py-2 bg-asean-blue opacity-50 cursor-not-allowed text-white rounded-lg font-medium text-xs md:text-sm flex items-center gap-2">
+                            Tiếp theo <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </section>
+
+                <!-- PAGE 3: ASEAN RA ĐỜI -->
+                <section id="page-3" class="book-page hidden w-full h-full bg-white rounded-2xl shadow-2xl p-6 md:p-8 flex flex-col justify-between border border-slate-200 relative overflow-y-auto">
+                    <div>
+                        <div class="flex justify-between items-center mb-4 border-b border-slate-200 pb-3">
+                            <div class="flex items-center gap-2 text-asean-blue font-bold text-sm uppercase tracking-wider">
+                                <span class="w-7 h-7 bg-asean-blue text-white rounded-lg flex items-center justify-center text-xs">03</span>
+                                <span>Trạm 3: ASEAN ra đời (8/8/1967)</span>
+                            </div>
+                            <span class="text-xs text-slate-400">Trang 3 / 12</span>
+                        </div>
+
+                        <div class="text-center mb-4">
+                            <span class="px-3 py-1 bg-amber-100 text-amber-800 text-xs font-bold rounded-full">
+                                📍 BĂNG CỐC (THÁI LAN) – 8/8/1967
+                            </span>
+                            <p class="text-slate-600 text-xs md:text-sm mt-1">
+                                Click khám phá 5 quốc gia sáng lập thông qua Tuyên bố ASEAN (Tuyên bố Băng Cốc):
+                            </p>
+                        </div>
+
+                        <!-- 5 Founding Members Grid -->
+                        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 my-3">
+                            <!-- Indonesia -->
+                            <div onclick="clickFoundingMember('id', this)" class="member-card cursor-pointer bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-asean-blue rounded-xl p-3 text-center transition-all duration-300 transform hover:-translate-y-1">
+                                <div class="text-3xl mb-1">🇮🇩</div>
+                                <h4 class="font-bold text-slate-800 text-xs md:text-sm">In-đô-nê-xi-a</h4>
+                                <span class="text-[11px] text-asean-blue font-semibold block mt-1">Sáng lập</span>
+                            </div>
+
+                            <!-- Malaysia -->
+                            <div onclick="clickFoundingMember('my', this)" class="member-card cursor-pointer bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-asean-blue rounded-xl p-3 text-center transition-all duration-300 transform hover:-translate-y-1">
+                                <div class="text-3xl mb-1">🇲🇾</div>
+                                <h4 class="font-bold text-slate-800 text-xs md:text-sm">Ma-lai-xi-a</h4>
+                                <span class="text-[11px] text-asean-blue font-semibold block mt-1">Sáng lập</span>
+                            </div>
+
+                            <!-- Philippines -->
+                            <div onclick="clickFoundingMember('ph', this)" class="member-card cursor-pointer bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-asean-blue rounded-xl p-3 text-center transition-all duration-300 transform hover:-translate-y-1">
+                                <div class="text-3xl mb-1">🇵🇭</div>
+                                <h4 class="font-bold text-slate-800 text-xs md:text-sm">Phi-líp-pin</h4>
+                                <span class="text-[11px] text-asean-blue font-semibold block mt-1">Sáng lập</span>
+                            </div>
+
+                            <!-- Singapore -->
+                            <div onclick="clickFoundingMember('sg', this)" class="member-card cursor-pointer bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-asean-blue rounded-xl p-3 text-center transition-all duration-300 transform hover:-translate-y-1">
+                                <div class="text-3xl mb-1">🇸🇬</div>
+                                <h4 class="font-bold text-slate-800 text-xs md:text-sm">Xin-ga-po</h4>
+                                <span class="text-[11px] text-asean-blue font-semibold block mt-1">Sáng lập</span>
+                            </div>
+
+                            <!-- Thailand -->
+                            <div onclick="clickFoundingMember('th', this)" class="member-card cursor-pointer bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-asean-blue rounded-xl p-3 text-center transition-all duration-300 transform hover:-translate-y-1">
+                                <div class="text-3xl mb-1">🇹🇭</div>
+                                <h4 class="font-bold text-slate-800 text-xs md:text-sm">Thái Lan</h4>
+                                <span class="text-[11px] text-asean-blue font-semibold block mt-1">Sáng lập</span>
+                            </div>
+                        </div>
+
+                        <!-- Member Info Detail Box -->
+                        <div id="founding-detail" class="bg-slate-800 text-white p-4 rounded-xl text-xs md:text-sm min-h-[90px] flex items-center justify-center text-center">
+                            <span class="text-slate-400">👈 Nhấp vào các cờ quốc gia ở trên để mở khóa thông tin chi tiết!</span>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center pt-4 border-t border-slate-200">
+                        <button onclick="prevPage()" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg font-medium text-xs md:text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-arrow-left"></i> Trang trước
+                        </button>
+                        <button id="page3-next" onclick="nextPage()" disabled class="px-5 py-2 bg-asean-blue opacity-50 cursor-not-allowed text-white rounded-lg font-medium text-xs md:text-sm flex items-center gap-2">
+                            Tiếp theo <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </section>
+
+                <!-- PAGE 4: MỤC ĐÍCH -->
+                <section id="page-4" class="book-page hidden w-full h-full bg-white rounded-2xl shadow-2xl p-6 md:p-8 flex flex-col justify-between border border-slate-200 relative overflow-y-auto">
+                    <div>
+                        <div class="flex justify-between items-center mb-3 border-b border-slate-200 pb-3">
+                            <div class="flex items-center gap-2 text-asean-blue font-bold text-sm uppercase tracking-wider">
+                                <span class="w-7 h-7 bg-asean-blue text-white rounded-lg flex items-center justify-center text-xs">04</span>
+                                <span>Trạm 4: Mục đích thành lập ASEAN</span>
+                            </div>
+                            <span class="text-xs text-slate-400">Trang 4 / 12</span>
+                        </div>
+
+                        <p class="text-xs md:text-sm text-slate-600 mb-3 text-center">
+                            Chạm vào từng thẻ 3D để giải mã các trụ cột mục đích trọng tâm theo Tuyên bố ASEAN (1967):
+                        </p>
+
+                        <!-- 3 Flippable Cards -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-2">
+                            <!-- Card 1 -->
+                            <div class="flip-card h-40 cursor-pointer" onclick="this.classList.toggle('flipped'); checkPage4Cards();">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front bg-gradient-to-br from-emerald-500 to-teal-700 text-white p-4 flex flex-col items-center justify-center shadow-md">
+                                        <div class="text-3xl mb-2">🌱</div>
+                                        <h4 class="font-bold text-base">PHÁT TRIỂN</h4>
+                                        <span class="text-[11px] opacity-80 mt-1">Chạm để lật 3D</span>
+                                    </div>
+                                    <div class="flip-card-back bg-slate-800 text-white p-4 flex flex-col items-center justify-center border border-emerald-400">
+                                        <p class="text-xs text-slate-200 text-center">
+                                            Thúc đẩy tăng trưởng kinh tế, tiến bộ xã hội và phát triển văn hóa trong khu vực.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Card 2 -->
+                            <div class="flip-card h-40 cursor-pointer" onclick="this.classList.toggle('flipped'); checkPage4Cards();">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front bg-gradient-to-br from-blue-600 to-indigo-800 text-white p-4 flex flex-col items-center justify-center shadow-md">
+                                        <div class="text-3xl mb-2">🕊️</div>
+                                        <h4 class="font-bold text-base">HÒA BÌNH</h4>
+                                        <span class="text-[11px] opacity-80 mt-1">Chạm để lật 3D</span>
+                                    </div>
+                                    <div class="flip-card-back bg-slate-800 text-white p-4 flex flex-col items-center justify-center border border-blue-400">
+                                        <p class="text-xs text-slate-200 text-center">
+                                            Thúc đẩy hòa bình và ổn định khu vực bằng việc tôn trọng công lý và nguyên tắc luật pháp.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Card 3 -->
+                            <div class="flip-card h-40 cursor-pointer" onclick="this.classList.toggle('flipped'); checkPage4Cards();">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front bg-gradient-to-br from-amber-500 to-red-600 text-white p-4 flex flex-col items-center justify-center shadow-md">
+                                        <div class="text-3xl mb-2">🤝</div>
+                                        <h4 class="font-bold text-base">HỢP TÁC</h4>
+                                        <span class="text-[11px] opacity-80 mt-1">Chạm để lật 3D</span>
+                                    </div>
+                                    <div class="flip-card-back bg-slate-800 text-white p-4 flex flex-col items-center justify-center border border-amber-400">
+                                        <p class="text-xs text-slate-200 text-center">
+                                            Thúc đẩy sự cộng tác tích cực và giúp đỡ lẫn nhau trong các lĩnh vực kinh tế, xã hội, KH-KT.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Mini Question -->
+                        <div class="bg-amber-50 p-3 rounded-xl border border-amber-200 text-center mt-3">
+                            <p class="text-xs md:text-sm font-semibold text-slate-800">
+                                💡 Nếu dùng 3 từ cốt lõi nhất để ghi nhớ mục đích thành lập ASEAN, em chọn cụm từ nào?
+                            </p>
+                            <div class="mt-2 inline-block px-4 py-1.5 bg-asean-yellow text-slate-900 rounded-full font-bold text-xs md:text-sm tracking-wider shadow">
+                                HỢP TÁC – HÒA BÌNH – PHÁT TRIỂN
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center pt-3 border-t border-slate-200">
+                        <button onclick="prevPage()" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg font-medium text-xs md:text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-arrow-left"></i> Trang trước
+                        </button>
+                        <button id="page4-next" onclick="nextPage()" disabled class="px-5 py-2 bg-asean-blue opacity-50 cursor-not-allowed text-white rounded-lg font-medium text-xs md:text-sm flex items-center gap-2">
+                            Tiếp theo <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </section>
+
+                <!-- PAGE 5: MAP INTERACTIVE & TIMELINE -->
+                <section id="page-5" class="book-page hidden w-full h-full bg-slate-900 text-white rounded-2xl shadow-2xl p-4 md:p-6 flex flex-col justify-between border border-slate-700 relative overflow-y-auto">
+                    <div>
+                        <div class="flex justify-between items-center mb-2 border-b border-slate-800 pb-2">
+                            <div class="flex items-center gap-2 text-asean-yellow font-bold text-sm uppercase tracking-wider">
+                                <span class="w-7 h-7 bg-asean-yellow text-slate-900 rounded-lg flex items-center justify-center text-xs font-black">05</span>
+                                <span>Trạm 5: Bản đồ Hành trình Mở rộng ASEAN</span>
+                            </div>
+                            <span class="text-xs text-slate-400">Trang 5 / 12</span>
+                        </div>
+
+                        <!-- Map Player Header Controls -->
+                        <div class="flex flex-wrap items-center justify-between gap-2 bg-slate-800/80 p-2.5 rounded-xl border border-slate-700 mb-2">
+                            <div class="flex items-center space-x-2">
+                                <button id="btn-play-map" onclick="toggleMapTimeline()" class="px-3 py-1.5 bg-asean-yellow text-slate-900 hover:bg-amber-400 rounded-lg font-bold text-xs flex items-center gap-1.5 transition">
+                                    <i id="play-icon" class="fa-solid fa-play"></i>
+                                    <span id="play-text">CHẠY HÀNH TRÌNH</span>
+                                </button>
+                                <button onclick="resetMapTimeline()" class="px-2.5 py-1.5 bg-slate-700 hover:bg-slate-600 text-slate-300 rounded-lg text-xs transition">
+                                    <i class="fa-solid fa-rotate-left"></i>
+                                </button>
+                            </div>
+                            <div class="text-xs font-bold text-amber-300 flex items-center gap-2">
+                                <span id="map-status-year" class="px-2.5 py-1 bg-asean-blue rounded-md border border-blue-400">Năm: 1967</span>
+                                <span id="map-status-label" class="text-slate-300">ASEAN 5</span>
+                            </div>
+                        </div>
+
+                        <!-- Interactive Vector SVG Map of Southeast Asia -->
+                        <div class="relative w-full h-[220px] sm:h-[260px] md:h-[290px] bg-slate-950 rounded-xl border border-slate-800 overflow-hidden flex items-center justify-center">
+                            <svg id="asean-svg-map" class="w-full h-full p-2" viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+                                <!-- Sea background grid -->
+                                <defs>
+                                    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                                        <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e293b" stroke-width="0.8"/>
+                                    </pattern>
+                                </defs>
+                                <rect width="800" height="500" fill="#090d16"/>
+                                <rect width="800" height="500" fill="url(#grid)"/>
+
+                                <!-- Simplified Geographic Paths for 10 Countries -->
+                                <!-- Myanmar (1997) -->
+                                <path id="country-mm" onclick="clickCountry('mm')" class="transition-all duration-500 cursor-pointer stroke-slate-700 stroke-[1.5]" fill="#334155" fill-opacity="0.3" d="M 180,120 L 220,110 L 240,160 L 220,220 L 190,260 L 170,200 Z" />
+                                <text x="195" y="180" fill="#ffffff" font-size="11" font-weight="bold" class="pointer-events-none">🇲🇲 MM</text>
+
+                                <!-- Thailand (1967) -->
+                                <path id="country-th" onclick="clickCountry('th')" class="transition-all duration-500 cursor-pointer stroke-slate-700 stroke-[1.5]" fill="#334155" fill-opacity="0.3" d="M 230,170 L 280,180 L 270,240 L 240,290 L 220,240 Z" />
+                                <text x="240" y="220" fill="#ffffff" font-size="11" font-weight="bold" class="pointer-events-none">🇹🇭 TH</text>
+
+                                <!-- Laos (1997) -->
+                                <path id="country-la" onclick="clickCountry('la')" class="transition-all duration-500 cursor-pointer stroke-slate-700 stroke-[1.5]" fill="#334155" fill-opacity="0.3" d="M 270,120 L 320,150 L 300,200 L 260,170 Z" />
+                                <text x="280" y="160" fill="#ffffff" font-size="11" font-weight="bold" class="pointer-events-none">🇱🇦 LA</text>
+
+                                <!-- Vietnam (1995) -->
+                                <path id="country-vn" onclick="clickCountry('vn')" class="transition-all duration-500 cursor-pointer stroke-slate-700 stroke-[1.5]" fill="#334155" fill-opacity="0.3" d="M 320,110 L 360,140 L 330,220 L 350,280 L 310,250 L 300,200 Z" />
+                                <text x="325" y="190" fill="#ffffff" font-size="12" font-weight="bold" class="pointer-events-none">🇻🇳 VN</text>
+
+                                <!-- Cambodia (1999) -->
+                                <path id="country-kh" onclick="clickCountry('kh')" class="transition-all duration-500 cursor-pointer stroke-slate-700 stroke-[1.5]" fill="#334155" fill-opacity="0.3" d="M 280,220 L 320,220 L 310,260 L 270,250 Z" />
+                                <text x="285" y="240" fill="#ffffff" font-size="11" font-weight="bold" class="pointer-events-none">🇰🇭 KH</text>
+
+                                <!-- Malaysia (1967) -->
+                                <path id="country-my" onclick="clickCountry('my')" class="transition-all duration-500 cursor-pointer stroke-slate-700 stroke-[1.5]" fill="#334155" fill-opacity="0.3" d="M 230,300 L 270,330 L 240,350 Z M 400,340 L 480,330 L 460,370 Z" />
+                                <text x="240" y="325" fill="#ffffff" font-size="11" font-weight="bold" class="pointer-events-none">🇲🇾 MY</text>
+
+                                <!-- Singapore (1967) -->
+                                <circle id="country-sg" onclick="clickCountry('sg')" cx="272" cy="355" r="10" class="transition-all duration-500 cursor-pointer stroke-yellow-400 stroke-[2]" fill="#334155" fill-opacity="0.3" />
+                                <text x="287" y="360" fill="#ffffff" font-size="10" font-weight="bold" class="pointer-events-none">🇸🇬 SG</text>
+
+                                <!-- Brunei (1984) -->
+                                <circle id="country-bn" onclick="clickCountry('bn')" cx="440" cy="325" r="10" class="transition-all duration-500 cursor-pointer stroke-yellow-400 stroke-[2]" fill="#334155" fill-opacity="0.3" />
+                                <text x="455" y="330" fill="#ffffff" font-size="10" font-weight="bold" class="pointer-events-none">🇧🇳 BN</text>
+
+                                <!-- Philippines (1967) -->
+                                <path id="country-ph" onclick="clickCountry('ph')" class="transition-all duration-500 cursor-pointer stroke-slate-700 stroke-[1.5]" fill="#334155" fill-opacity="0.3" d="M 480,140 L 530,160 L 500,260 L 460,220 Z" />
+                                <text x="480" y="200" fill="#ffffff" font-size="11" font-weight="bold" class="pointer-events-none">🇵🇭 PH</text>
+
+                                <!-- Indonesia (1967) -->
+                                <path id="country-id" onclick="clickCountry('id')" class="transition-all duration-500 cursor-pointer stroke-slate-700 stroke-[1.5]" fill="#334155" fill-opacity="0.3" d="M 200,370 L 300,380 L 380,410 L 240,430 Z M 400,380 L 560,380 L 580,440 L 420,430 Z" />
+                                <text x="350" y="415" fill="#ffffff" font-size="12" font-weight="bold" class="pointer-events-none">🇮🇩 ID</text>
+                            </svg>
+
+                            <!-- Milestone Highlight overlay -->
+                            <div id="map-milestone-popup" class="absolute bottom-3 left-3 right-3 bg-slate-900/90 border border-amber-500/50 p-2.5 rounded-lg text-xs text-center backdrop-blur-md transition-all">
+                                Nhấp <strong>"CHẠY HÀNH TRÌNH"</strong> để xem các mốc mở rộng từ 1967 đến 1999!
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center pt-3 border-t border-slate-800">
+                        <button onclick="prevPage()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg font-medium text-xs md:text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-arrow-left"></i> Trang trước
+                        </button>
+                        <button id="page5-next" onclick="nextPage()" disabled class="px-5 py-2 bg-asean-blue opacity-50 cursor-not-allowed text-white rounded-lg font-medium text-xs md:text-sm flex items-center gap-2">
+                            Tiếp theo <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </section>
+
+                <!-- PAGE 6: TRẠM KÉO THẢ MỐC THỜI GIAN -->
+                <section id="page-6" class="book-page hidden w-full h-full bg-white rounded-2xl shadow-2xl p-6 md:p-8 flex flex-col justify-between border border-slate-200 relative overflow-y-auto">
+                    <div>
+                        <div class="flex justify-between items-center mb-3 border-b border-slate-200 pb-3">
+                            <div class="flex items-center gap-2 text-asean-blue font-bold text-sm uppercase tracking-wider">
+                                <span class="w-7 h-7 bg-asean-blue text-white rounded-lg flex items-center justify-center text-xs">06</span>
+                                <span>Trạm 6: Thách thức Kéo - Thả mốc mở rộng</span>
+                            </div>
+                            <span class="text-xs text-slate-400">Trang 6 / 12</span>
+                        </div>
+
+                        <p class="text-xs md:text-sm text-slate-600 mb-3">
+                            Kéo (hoặc nhấp chọn) các sự kiện mở rộng ở cột trái ghép vào đúng Năm gia nhập tương ứng ở cột phải:
+                        </p>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-2">
+                            <!-- Drag items column -->
+                            <div class="space-y-2 bg-slate-50 p-3 rounded-xl border border-slate-200">
+                                <h4 class="font-bold text-xs text-slate-700 uppercase">Sự kiện mở rộng:</h4>
+                                <div id="drag-item-1" onclick="selectMatchItem('drag', 1)" class="match-item draggable bg-white p-2.5 rounded-lg border border-slate-300 text-xs font-medium cursor-pointer hover:border-asean-blue shadow-sm">
+                                    🇻🇳 Việt Nam gia nhập (ASEAN 7)
+                                </div>
+                                <div id="drag-item-2" onclick="selectMatchItem('drag', 2)" class="match-item draggable bg-white p-2.5 rounded-lg border border-slate-300 text-xs font-medium cursor-pointer hover:border-asean-blue shadow-sm">
+                                    🇱🇦 🇲🇲 Lào & Myanmar gia nhập (ASEAN 9)
+                                </div>
+                                <div id="drag-item-3" onclick="selectMatchItem('drag', 3)" class="match-item draggable bg-white p-2.5 rounded-lg border border-slate-300 text-xs font-medium cursor-pointer hover:border-asean-blue shadow-sm">
+                                    🇧🇳 Brunei gia nhập (ASEAN 6)
+                                </div>
+                                <div id="drag-item-4" onclick="selectMatchItem('drag', 4)" class="match-item draggable bg-white p-2.5 rounded-lg border border-slate-300 text-xs font-medium cursor-pointer hover:border-asean-blue shadow-sm">
+                                    🇰🇭 Campuchia gia nhập (ASEAN 10)
+                                </div>
+                                <div id="drag-item-5" onclick="selectMatchItem('drag', 5)" class="match-item draggable bg-white p-2.5 rounded-lg border border-slate-300 text-xs font-medium cursor-pointer hover:border-asean-blue shadow-sm">
+                                    🌏 5 quốc gia sáng lập (ASEAN 5)
+                                </div>
+                            </div>
+
+                            <!-- Target drop slots -->
+                            <div class="space-y-2 bg-blue-50/50 p-3 rounded-xl border border-blue-100">
+                                <h4 class="font-bold text-xs text-asean-blue uppercase">Năm gia nhập:</h4>
+                                
+                                <div id="drop-slot-1967" onclick="selectMatchItem('drop', '1967', 5)" class="dropzone p-2.5 rounded-lg border-2 border-dashed border-slate-300 bg-white text-xs flex justify-between items-center min-h-[42px]">
+                                    <span class="font-bold text-amber-600">1967:</span>
+                                    <span class="slot-content text-slate-400 italic">Thả vào đây...</span>
+                                </div>
+
+                                <div id="drop-slot-1984" onclick="selectMatchItem('drop', '1984', 3)" class="dropzone p-2.5 rounded-lg border-2 border-dashed border-slate-300 bg-white text-xs flex justify-between items-center min-h-[42px]">
+                                    <span class="font-bold text-amber-600">1984:</span>
+                                    <span class="slot-content text-slate-400 italic">Thả vào đây...</span>
+                                </div>
+
+                                <div id="drop-slot-1995" onclick="selectMatchItem('drop', '1995', 1)" class="dropzone p-2.5 rounded-lg border-2 border-dashed border-slate-300 bg-white text-xs flex justify-between items-center min-h-[42px]">
+                                    <span class="font-bold text-amber-600">1995:</span>
+                                    <span class="slot-content text-slate-400 italic">Thả vào đây...</span>
+                                </div>
+
+                                <div id="drop-slot-1997" onclick="selectMatchItem('drop', '1997', 2)" class="dropzone p-2.5 rounded-lg border-2 border-dashed border-slate-300 bg-white text-xs flex justify-between items-center min-h-[42px]">
+                                    <span class="font-bold text-amber-600">1997:</span>
+                                    <span class="slot-content text-slate-400 italic">Thả vào đây...</span>
+                                </div>
+
+                                <div id="drop-slot-1999" onclick="selectMatchItem('drop', '1999', 4)" class="dropzone p-2.5 rounded-lg border-2 border-dashed border-slate-300 bg-white text-xs flex justify-between items-center min-h-[42px]">
+                                    <span class="font-bold text-amber-600">1999:</span>
+                                    <span class="slot-content text-slate-400 italic">Thả vào đây...</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Result notification -->
+                        <div id="page6-result" class="hidden text-center p-2 rounded-lg text-xs font-bold"></div>
+                    </div>
+
+                    <div class="flex justify-between items-center pt-3 border-t border-slate-200">
+                        <button onclick="prevPage()" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg font-medium text-xs md:text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-arrow-left"></i> Trang trước
+                        </button>
+                        <div class="flex gap-2">
+                            <button onclick="resetMatchingGame()" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-medium text-xs">
+                                <i class="fa-solid fa-rotate-right"></i> Làm lại
+                            </button>
+                            <button id="page6-next" onclick="nextPage()" disabled class="px-5 py-2 bg-asean-blue opacity-50 cursor-not-allowed text-white rounded-lg font-medium text-xs md:text-sm flex items-center gap-2">
+                                Tiếp theo <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PAGE 7: 4 GIAI ĐOẠN PHÁT TRIỂN -->
+                <section id="page-7" class="book-page hidden w-full h-full bg-white rounded-2xl shadow-2xl p-6 md:p-8 flex flex-col justify-between border border-slate-200 relative overflow-y-auto">
+                    <div>
+                        <div class="flex justify-between items-center mb-3 border-b border-slate-200 pb-3">
+                            <div class="flex items-center gap-2 text-asean-blue font-bold text-sm uppercase tracking-wider">
+                                <span class="w-7 h-7 bg-asean-blue text-white rounded-lg flex items-center justify-center text-xs">07</span>
+                                <span>Trạm 7: Giải mã 4 giai đoạn phát triển</span>
+                            </div>
+                            <span class="text-xs text-slate-400">Trang 7 / 12</span>
+                        </div>
+
+                        <p class="text-xs md:text-sm text-slate-600 mb-3 text-center">
+                            Chạm vào từng cánh cửa thời gian để mở khóa đặc điểm cốt lõi các giai đoạn phát triển:
+                        </p>
+
+                        <!-- 4 Doors Grid -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 my-2">
+                            <!-- Door 1 -->
+                            <div class="door-container relative bg-slate-800 rounded-xl overflow-hidden h-36 border border-slate-700 cursor-pointer shadow" onclick="toggleDoor(this, 1)">
+                                <div class="absolute inset-0 p-3 bg-slate-900 text-slate-200 text-xs flex flex-col justify-center">
+                                    <h5 class="font-bold text-amber-400 text-xs mb-1">🔑 1967 - 1976: Khởi đầu & Đặt nền móng</h5>
+                                    <p class="leading-relaxed">Tập trung hợp tác chính trị - an ninh, "xây dựng lòng tin và học cách hòa giải". Ký Tuyên bố ZOPFAN (1971).</p>
+                                </div>
+                                <div class="stage-door absolute inset-0 bg-gradient-to-r from-blue-700 to-asean-blue text-white p-4 flex flex-col justify-center items-center z-10 border-r-4 border-amber-400">
+                                    <span class="text-xl font-black text-amber-300">1967 – 1976</span>
+                                    <span class="text-xs font-semibold mt-1">"ĐẶT NỀN MÓNG"</span>
+                                    <span class="text-[10px] opacity-75 mt-2">Chạm để mở cửa 🚪</span>
+                                </div>
+                            </div>
+
+                            <!-- Door 2 -->
+                            <div class="door-container relative bg-slate-800 rounded-xl overflow-hidden h-36 border border-slate-700 cursor-pointer shadow" onclick="toggleDoor(this, 2)">
+                                <div class="absolute inset-0 p-3 bg-slate-900 text-slate-200 text-xs flex flex-col justify-center">
+                                    <h5 class="font-bold text-amber-400 text-xs mb-1">🔑 1976 - 1999: Hợp tác & Mở rộng</h5>
+                                    <p class="leading-relaxed">Tạo điều kiện phát triển kinh tế, mở rộng từ ASEAN 5 thành ASEAN 10. Ký Hiệp ước TAC (1976), thành lập AFTA (1992), ARF (1994).</p>
+                                </div>
+                                <div class="stage-door absolute inset-0 bg-gradient-to-r from-teal-700 to-emerald-700 text-white p-4 flex flex-col justify-center items-center z-10 border-r-4 border-amber-400">
+                                    <span class="text-xl font-black text-amber-300">1976 – 1999</span>
+                                    <span class="text-xs font-semibold mt-1">"HỢP TÁC & MỞ RỘNG"</span>
+                                    <span class="text-[10px] opacity-75 mt-2">Chạm để mở cửa 🚪</span>
+                                </div>
+                            </div>
+
+                            <!-- Door 3 -->
+                            <div class="door-container relative bg-slate-800 rounded-xl overflow-hidden h-36 border border-slate-700 cursor-pointer shadow" onclick="toggleDoor(this, 3)">
+                                <div class="absolute inset-0 p-3 bg-slate-900 text-slate-200 text-xs flex flex-col justify-center">
+                                    <h5 class="font-bold text-amber-400 text-xs mb-1">🔑 1999 - 2015: Hoàn thiện tổ chức</h5>
+                                    <p class="leading-relaxed">Tăng cường hợp tác nội khối & ngoại khối. Ký Tuyên bố Bali II (2003) và thông qua Hiến chương ASEAN (2007).</p>
+                                </div>
+                                <div class="stage-door absolute inset-0 bg-gradient-to-r from-purple-700 to-indigo-800 text-white p-4 flex flex-col justify-center items-center z-10 border-r-4 border-amber-400">
+                                    <span class="text-xl font-black text-amber-300">1999 – 2015</span>
+                                    <span class="text-xs font-semibold mt-1">"HƯỚNG TỚI CỘNG ĐỒNG"</span>
+                                    <span class="text-[10px] opacity-75 mt-2">Chạm để mở cửa 🚪</span>
+                                </div>
+                            </div>
+
+                            <!-- Door 4 -->
+                            <div class="door-container relative bg-slate-800 rounded-xl overflow-hidden h-36 border border-slate-700 cursor-pointer shadow" onclick="toggleDoor(this, 4)">
+                                <div class="absolute inset-0 p-3 bg-slate-900 text-slate-200 text-xs flex flex-col justify-center">
+                                    <h5 class="font-bold text-amber-400 text-xs mb-1">🔑 2015 - Nay: Cộng đồng ASEAN</h5>
+                                    <p class="leading-relaxed">Thành lập Cộng đồng ASEAN (2015) với 3 trụ cột (Chính trị-An ninh, Kinh tế, Văn hóa-Xã hội). Thực hiện Tầm nhìn 2025.</p>
+                                </div>
+                                <div class="stage-door absolute inset-0 bg-gradient-to-r from-red-700 to-rose-800 text-white p-4 flex flex-col justify-center items-center z-10 border-r-4 border-amber-400">
+                                    <span class="text-xl font-black text-amber-300">2015 – NAY</span>
+                                    <span class="text-xs font-semibold mt-1">"CỘNG ĐỒNG ASEAN"</span>
+                                    <span class="text-[10px] opacity-75 mt-2">Chạm để mở cửa 🚪</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center pt-3 border-t border-slate-200">
+                        <button onclick="prevPage()" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg font-medium text-xs md:text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-arrow-left"></i> Trang trước
+                        </button>
+                        <button id="page7-next" onclick="nextPage()" disabled class="px-5 py-2 bg-asean-blue opacity-50 cursor-not-allowed text-white rounded-lg font-medium text-xs md:text-sm flex items-center gap-2">
+                            Tiếp theo <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </section>
+
+                <!-- PAGE 8: BẢO TÀNG VĂN KIỆN SỐ -->
+                <section id="page-8" class="book-page hidden w-full h-full bg-slate-900 text-white rounded-2xl shadow-2xl p-6 md:p-8 flex flex-col justify-between border border-slate-700 relative overflow-y-auto">
+                    <div>
+                        <div class="flex justify-between items-center mb-3 border-b border-slate-800 pb-3">
+                            <div class="flex items-center gap-2 text-asean-yellow font-bold text-sm uppercase tracking-wider">
+                                <span class="w-7 h-7 bg-asean-yellow text-slate-900 rounded-lg flex items-center justify-center text-xs font-bold">08</span>
+                                <span>Trạm 8: Bảo tàng Văn kiện Lịch sử ASEAN</span>
+                            </div>
+                            <span class="text-xs text-slate-400">Trang 8 / 12</span>
+                        </div>
+
+                        <p class="text-xs md:text-sm text-slate-300 mb-3">
+                            Khám phá các hiện vật văn kiện pháp lý quan trọng được ghi nhận trong SGK:
+                        </p>
+
+                        <!-- Museum Documents Grid -->
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 my-2">
+                            <!-- Doc 1: ZOPFAN -->
+                            <div onclick="openDocMuseum('ZOPFAN (1971)', 'Tuyên bố về Khu vực Hòa bình, Tự do và Trung lập', 'Khẳng định quyết tâm giữ vững hòa bình, tự do và trung lập, tránh sự can thiệp của các cường quốc bên ngoài.')" class="bg-slate-800 hover:bg-slate-700 border border-amber-500/30 p-3 rounded-xl cursor-pointer transition text-center group">
+                                <i class="fa-solid fa-scroll text-2xl text-amber-400 group-hover:scale-110 transition-transform mb-1"></i>
+                                <h5 class="font-bold text-xs text-amber-300">ZOPFAN</h5>
+                                <span class="text-[10px] text-slate-400">Năm 1971</span>
+                            </div>
+
+                            <!-- Doc 2: TAC / Bali I -->
+                            <div onclick="openDocMuseum('TAC & Bali I (1976)', 'Tuyên bố Bali I & Hiệp ước Thân thiện Hợp tác (TAC)', 'Xác định các nguyên tắc cơ bản trong quan hệ giữa các nước: tôn trọng độc lập, chủ quyền, không can thiệp công việc nội bộ.')" class="bg-slate-800 hover:bg-slate-700 border border-amber-500/30 p-3 rounded-xl cursor-pointer transition text-center group">
+                                <i class="fa-solid fa-file-contract text-2xl text-amber-400 group-hover:scale-110 transition-transform mb-1"></i>
+                                <h5 class="font-bold text-xs text-amber-300">Bali I & TAC</h5>
+                                <span class="text-[10px] text-slate-400">Năm 1976</span>
+                            </div>
+
+                            <!-- Doc 3: AFTA -->
+                            <div onclick="openDocMuseum('AFTA (1992)', 'Khu vực Mậu dịch Tự do ASEAN', 'Hiệp định khung về tăng cường hợp tác kinh tế, thúc đẩy tự do hóa thương mại nội khối.')" class="bg-slate-800 hover:bg-slate-700 border border-amber-500/30 p-3 rounded-xl cursor-pointer transition text-center group">
+                                <i class="fa-solid fa-handshake text-2xl text-amber-400 group-hover:scale-110 transition-transform mb-1"></i>
+                                <h5 class="font-bold text-xs text-amber-300">AFTA</h5>
+                                <span class="text-[10px] text-slate-400">Năm 1992</span>
+                            </div>
+
+                            <!-- Doc 4: ARF -->
+                            <div onclick="openDocMuseum('ARF (1994)', 'Diễn đàn Khu vực ASEAN', 'Tạo khuôn khổ đối thoại an ninh chính trị giữa ASEAN và các đối tác bên ngoài.')" class="bg-slate-800 hover:bg-slate-700 border border-amber-500/30 p-3 rounded-xl cursor-pointer transition text-center group">
+                                <i class="fa-solid fa-shield-halved text-2xl text-amber-400 group-hover:scale-110 transition-transform mb-1"></i>
+                                <h5 class="font-bold text-xs text-amber-300">ARF</h5>
+                                <span class="text-[10px] text-slate-400">Năm 1994</span>
+                            </div>
+
+                            <!-- Doc 5: Bali II -->
+                            <div onclick="openDocMuseum('Bali II (2003)', 'Tuyên bố Hòa hợp ASEAN II', 'Đặt nền móng cho việc xây dựng Cộng đồng ASEAN dựa trên 3 trụ cột cốt lõi.')" class="bg-slate-800 hover:bg-slate-700 border border-amber-500/30 p-3 rounded-xl cursor-pointer transition text-center group">
+                                <i class="fa-solid fa-landmark text-2xl text-amber-400 group-hover:scale-110 transition-transform mb-1"></i>
+                                <h5 class="font-bold text-xs text-amber-300">Bali II</h5>
+                                <span class="text-[10px] text-slate-400">Năm 2003</span>
+                            </div>
+
+                            <!-- Doc 6: ASEAN Charter -->
+                            <div onclick="openDocMuseum('Hiến chương ASEAN (2007)', 'Hiến chương Hiệp hội các quốc gia Đông Nam Á', 'Tạo cơ sở pháp lý và khuôn khổ thể chế cho ASEAN, biến ASEAN thành tổ chức liên chính phủ có tư cách pháp nhân.')" class="bg-slate-800 hover:bg-slate-700 border border-amber-500/30 p-3 rounded-xl cursor-pointer transition text-center group">
+                                <i class="fa-solid fa-book-bookmark text-2xl text-amber-400 group-hover:scale-110 transition-transform mb-1"></i>
+                                <h5 class="font-bold text-xs text-amber-300">Hiến chương</h5>
+                                <span class="text-[10px] text-slate-400">Năm 2007</span>
+                            </div>
+
+                            <!-- Doc 7: Community 2015 -->
+                            <div onclick="openDocMuseum('Cộng đồng ASEAN (2015)', 'Tuyên bố thành lập Cộng đồng ASEAN', 'Chính thức hình thành Cộng đồng ASEAN (31/12/2015) - bước ngoặt lịch sử quan trọng.')" class="bg-slate-800 hover:bg-slate-700 border border-amber-500/30 p-3 rounded-xl cursor-pointer transition text-center group">
+                                <i class="fa-solid fa-users-rays text-2xl text-amber-400 group-hover:scale-110 transition-transform mb-1"></i>
+                                <h5 class="font-bold text-xs text-amber-300">Cộng đồng 2015</h5>
+                                <span class="text-[10px] text-slate-400">31/12/2015</span>
+                            </div>
+
+                            <!-- Doc 8: Vision 2025 -->
+                            <div onclick="openDocMuseum('Tầm nhìn 2025', 'Tầm nhìn Cộng đồng ASEAN 2025', 'Định hướng phát triển tự cường, đổi mới sáng tạo, gắn kết và thụ hưởng chung.')" class="bg-slate-800 hover:bg-slate-700 border border-amber-500/30 p-3 rounded-xl cursor-pointer transition text-center group">
+                                <i class="fa-solid fa-eye text-2xl text-amber-400 group-hover:scale-110 transition-transform mb-1"></i>
+                                <h5 class="font-bold text-xs text-amber-300">Tầm nhìn 2025</h5>
+                                <span class="text-[10px] text-slate-400">Năm 2015</span>
+                            </div>
+                        </div>
+
+                        <!-- Display Panel -->
+                        <div id="museum-display" class="bg-slate-950 p-3.5 rounded-xl border border-slate-800 text-xs min-h-[75px]">
+                            <span class="text-slate-500 italic">👉 Nhấp vào một văn kiện ở trên để phóng to và xem ý nghĩa lịch sử.</span>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center pt-3 border-t border-slate-800">
+                        <button onclick="prevPage()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg font-medium text-xs md:text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-arrow-left"></i> Trang trước
+                        </button>
+                        <button id="page8-next" onclick="nextPage()" disabled class="px-5 py-2 bg-asean-blue opacity-50 cursor-not-allowed text-white rounded-lg font-medium text-xs md:text-sm flex items-center gap-2">
+                            Tiếp theo <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </section>
+
+                <!-- PAGE 9: QUIZ TRẮC NGHIỆM -->
+                <section id="page-9" class="book-page hidden w-full h-full bg-white rounded-2xl shadow-2xl p-6 md:p-8 flex flex-col justify-between border border-slate-200 relative overflow-y-auto">
+                    <div>
+                        <div class="flex justify-between items-center mb-3 border-b border-slate-200 pb-3">
+                            <div class="flex items-center gap-2 text-asean-blue font-bold text-sm uppercase tracking-wider">
+                                <span class="w-7 h-7 bg-asean-blue text-white rounded-lg flex items-center justify-center text-xs">09</span>
+                                <span>Trạm 9: Thử thách Trắc nghiệm Lịch sử</span>
+                            </div>
+                            <span id="quiz-progress-num" class="text-xs font-bold text-asean-blue">Câu 1/5</span>
+                        </div>
+
+                        <!-- Quiz Container -->
+                        <div id="quiz-container" class="max-w-2xl mx-auto my-2">
+                            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 mb-3">
+                                <h4 id="quiz-question" class="font-bold text-slate-800 text-sm md:text-base">
+                                    Đang tải câu hỏi...
+                                </h4>
+                            </div>
+
+                            <div id="quiz-options" class="space-y-2">
+                                <!-- Dynamic Options -->
+                            </div>
+
+                            <div id="quiz-explanation" class="hidden mt-3 p-3 rounded-xl text-xs leading-relaxed border transition-all"></div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center pt-3 border-t border-slate-200">
+                        <button onclick="prevPage()" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg font-medium text-xs md:text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-arrow-left"></i> Trang trước
+                        </button>
+                        <button id="page9-next" onclick="nextPage()" disabled class="px-5 py-2 bg-asean-blue opacity-50 cursor-not-allowed text-white rounded-lg font-medium text-xs md:text-sm flex items-center gap-2">
+                            Tiếp theo <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </section>
+
+                <!-- PAGE 10: SẮP XẾP LỊCH SỬ -->
+                <section id="page-10" class="book-page hidden w-full h-full bg-white rounded-2xl shadow-2xl p-6 md:p-8 flex flex-col justify-between border border-slate-200 relative overflow-y-auto">
+                    <div>
+                        <div class="flex justify-between items-center mb-3 border-b border-slate-200 pb-3">
+                            <div class="flex items-center gap-2 text-asean-blue font-bold text-sm uppercase tracking-wider">
+                                <span class="w-7 h-7 bg-asean-blue text-white rounded-lg flex items-center justify-center text-xs">10</span>
+                                <span>Trạm 10: Sắp xếp Dòng thời gian</span>
+                            </div>
+                            <span class="text-xs text-slate-400">Trang 10 / 12</span>
+                        </div>
+
+                        <p class="text-xs md:text-sm text-slate-600 mb-3">
+                            Nhấp vào các mốc lịch sử bên dưới để sắp xếp theo <strong>đúng thứ tự thời gian</strong> từ trước đến sau:
+                        </p>
+
+                        <!-- Unordered buttons pool -->
+                        <div id="timeline-pool" class="flex flex-wrap gap-2 p-3 bg-slate-50 rounded-xl border border-slate-200 mb-3 min-h-[60px]">
+                            <!-- Dynamic timeline pool items -->
+                        </div>
+
+                        <!-- Ordered slots -->
+                        <div class="space-y-1.5">
+                            <h5 class="font-bold text-xs text-asean-blue uppercase">Dòng thời gian chuẩn:</h5>
+                            <div id="timeline-slots" class="space-y-1.5">
+                                <!-- Slot containers -->
+                            </div>
+                        </div>
+
+                        <div id="timeline-result" class="hidden mt-3 p-2.5 rounded-lg text-xs font-bold text-center"></div>
+                    </div>
+
+                    <div class="flex justify-between items-center pt-3 border-t border-slate-200">
+                        <button onclick="prevPage()" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg font-medium text-xs md:text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-arrow-left"></i> Trang trước
+                        </button>
+                        <div class="flex gap-2">
+                            <button onclick="resetTimelineGame()" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-medium text-xs">
+                                <i class="fa-solid fa-rotate-right"></i> Đặt lại
+                            </button>
+                            <button id="page10-next" onclick="nextPage()" disabled class="px-5 py-2 bg-asean-blue opacity-50 cursor-not-allowed text-white rounded-lg font-medium text-xs md:text-sm flex items-center gap-2">
+                                Tiếp theo <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PAGE 11: MINDMAP -->
+                <section id="page-11" class="book-page hidden w-full h-full bg-slate-50 rounded-2xl shadow-2xl p-4 md:p-6 flex flex-col justify-between border border-slate-200 relative overflow-y-auto">
+                    <div>
+                        <div class="flex justify-between items-center mb-2 border-b border-slate-200 pb-2">
+                            <div class="flex items-center gap-2 text-asean-blue font-bold text-sm uppercase tracking-wider">
+                                <span class="w-7 h-7 bg-asean-blue text-white rounded-lg flex items-center justify-center text-xs">11</span>
+                                <span>Trạm 11: Sơ đồ Tư duy Tổng kết (Mindmap)</span>
+                            </div>
+                            <span class="text-xs text-slate-400">Trang 11 / 12</span>
+                        </div>
+
+                        <p class="text-xs text-slate-500 mb-2 text-center">
+                            Chạm vào các nhánh tư duy để hệ thống hóa toàn bộ kiến thức bài học:
+                        </p>
+
+                        <!-- Mindmap Graphic Canvas Structure -->
+                        <div class="relative w-full min-h-[280px] bg-white rounded-xl p-3 border border-slate-200 flex flex-col items-center justify-center">
+                            
+                            <!-- Center Node -->
+                            <div class="z-10 bg-gradient-to-r from-asean-blue to-indigo-900 text-white font-extrabold text-sm md:text-base px-5 py-2.5 rounded-2xl shadow-lg border-2 border-asean-yellow text-center mb-4">
+                                🌏 ASEAN: HÀNH TRÌNH LỊCH SỬ
+                            </div>
+
+                            <!-- 5 Main Branches Grid -->
+                            <div class="grid grid-cols-2 md:grid-cols-5 gap-2 w-full z-10">
+                                <!-- Branch 1 -->
+                                <div onclick="showMindmapDetail('b1')" class="mindmap-node bg-amber-50 hover:bg-amber-100 border border-amber-300 p-2.5 rounded-xl cursor-pointer text-center transition shadow-sm">
+                                    <div class="text-lg">🌏</div>
+                                    <h5 class="font-bold text-amber-900 text-xs">1. RA ĐỜI</h5>
+                                    <span class="text-[10px] text-amber-700">8/8/1967 (Băng Cốc)</span>
+                                </div>
+
+                                <!-- Branch 2 -->
+                                <div onclick="showMindmapDetail('b2')" class="mindmap-node bg-blue-50 hover:bg-blue-100 border border-blue-300 p-2.5 rounded-xl cursor-pointer text-center transition shadow-sm">
+                                    <div class="text-lg">🎯</div>
+                                    <h5 class="font-bold text-blue-900 text-xs">2. MỤC ĐÍCH</h5>
+                                    <span class="text-[10px] text-blue-700">Hợp tác - Hòa bình - PT</span>
+                                </div>
+
+                                <!-- Branch 3 -->
+                                <div onclick="showMindmapDetail('b3')" class="mindmap-node bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 p-2.5 rounded-xl cursor-pointer text-center transition shadow-sm">
+                                    <div class="text-lg">🚩</div>
+                                    <h5 class="font-bold text-emerald-900 text-xs">3. MỞ RỘNG</h5>
+                                    <span class="text-[10px] text-emerald-700">ASEAN 5 ➔ ASEAN 10</span>
+                                </div>
+
+                                <!-- Branch 4 -->
+                                <div onclick="showMindmapDetail('b4')" class="mindmap-node bg-purple-50 hover:bg-purple-100 border border-purple-300 p-2.5 rounded-xl cursor-pointer text-center transition shadow-sm">
+                                    <div class="text-lg">📜</div>
+                                    <h5 class="font-bold text-purple-900 text-xs">4. PHÁT TRIỂN</h5>
+                                    <span class="text-[10px] text-purple-700">4 Giai đoạn chính</span>
+                                </div>
+
+                                <!-- Branch 5 -->
+                                <div onclick="showMindmapDetail('b5')" class="mindmap-node col-span-2 md:col-span-1 bg-rose-50 hover:bg-rose-100 border border-rose-300 p-2.5 rounded-xl cursor-pointer text-center transition shadow-sm">
+                                    <div class="text-lg">🤝</div>
+                                    <h5 class="font-bold text-rose-900 text-xs">5. CỘNG ĐỒNG</h5>
+                                    <span class="text-[10px] text-rose-700">Hình thành 2015</span>
+                                </div>
+                            </div>
+
+                            <!-- Mindmap detail text box -->
+                            <div id="mindmap-detail" class="mt-3 w-full bg-slate-800 text-white p-3 rounded-xl text-xs min-h-[65px] flex items-center justify-center text-center">
+                                <span class="text-slate-400">💡 Bấm vào từng nhánh ở trên để hiển thị tóm tắt trọng tâm giảng dạy!</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center pt-3 border-t border-slate-200">
+                        <button onclick="prevPage()" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg font-medium text-xs md:text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-arrow-left"></i> Trang trước
+                        </button>
+                        <button id="page11-next" onclick="nextPage()" disabled class="px-5 py-2 bg-asean-blue opacity-50 cursor-not-allowed text-white rounded-lg font-medium text-xs md:text-sm flex items-center gap-2">
+                            Tiếp theo <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </section>
+
+                <!-- PAGE 12: VẬN DỤNG & TỔNG KẾT -->
+                <section id="page-12" class="book-page hidden w-full h-full bg-slate-900 text-white rounded-2xl shadow-2xl p-6 md:p-8 flex flex-col justify-between border-2 border-asean-yellow relative overflow-y-auto">
+                    <div>
+                        <div class="flex justify-between items-center mb-3 border-b border-slate-800 pb-3">
+                            <div class="flex items-center gap-2 text-asean-yellow font-bold text-sm uppercase tracking-wider">
+                                <span class="w-7 h-7 bg-asean-yellow text-slate-900 rounded-lg flex items-center justify-center text-xs font-bold">12</span>
+                                <span>Trạm 12: Vận dụng & Nhận Huy hiệu Chuyên gia</span>
+                            </div>
+                            <span class="text-xs text-slate-400">Trang 12 / 12</span>
+                        </div>
+
+                        <div class="max-w-2xl mx-auto space-y-3">
+                            <div class="bg-slate-800 p-3.5 rounded-xl border border-slate-700 text-xs leading-relaxed">
+                                <h4 class="font-bold text-amber-300 mb-1">
+                                    <i class="fa-solid fa-pen-to-square mr-1"></i> Câu hỏi Vận dụng SGK:
+                                </h4>
+                                <p class="text-slate-300 italic">
+                                    "Có ý kiến cho rằng: Sự ra đời của ASEAN là một bước ngoặt quan trọng trong lịch sử Đông Nam Á. Em có đồng ý không? Vì sao?"
+                                </p>
+                            </div>
+
+                            <div class="space-y-2">
+                                <div class="flex gap-4 text-xs font-medium">
+                                    <label class="flex items-center gap-2 cursor-pointer">
+                                        <input type="radio" name="opinion" value="agree" checked class="text-asean-yellow focus:ring-amber-400">
+                                        <span>Đồng ý hoàn toàn</span>
+                                    </label>
+                                    <label class="flex items-center gap-2 cursor-pointer">
+                                        <input type="radio" name="opinion" value="disagree" class="text-asean-yellow focus:ring-amber-400">
+                                        <span>Không đồng ý</span>
+                                    </label>
+                                </div>
+
+                                <textarea id="reflection-text" rows="2" placeholder="Nhập lý giải ngắn gọn của em dựa trên kiến thức đã học..." class="w-full bg-slate-950 text-slate-200 border border-slate-700 rounded-xl p-2.5 text-xs focus:border-amber-400 focus:outline-none"></textarea>
+
+                                <button onclick="submitReflection()" class="w-full py-2 bg-gradient-to-r from-amber-500 to-asean-yellow text-slate-900 font-bold rounded-xl text-xs hover:opacity-90 transition shadow">
+                                    GỬI CÂU TRẢ LỜI & MỞ KHÓA HOÀN THÀNH
+                                </button>
+                            </div>
+
+                            <!-- Model answer guide box -->
+                            <div id="reflection-guide" class="hidden p-3 bg-emerald-950/80 border border-emerald-500/40 rounded-xl text-xs text-emerald-200 leading-relaxed">
+                                <strong class="text-emerald-300 block mb-1">✓ Gợi ý trả lời theo chuẩn SGK:</strong>
+                                Đồng ý. Vì việc thành lập ASEAN chấm dứt tình trạng chia rẽ, nghi kỵ giữa các quốc gia; mở ra kỷ nguyên hợp tác hòa bình, tự do và thịnh vượng; từng bước biến Đông Nam Á từ khu vực xung đột thành một cộng đồng gắn kết gồm đủ 10 quốc gia.
+                            </div>
+
+                            <!-- Final Master Badge Unlocked Card -->
+                            <div id="final-master-card" class="hidden bg-gradient-to-br from-amber-500/20 to-yellow-600/30 border-2 border-amber-400 p-4 rounded-2xl text-center space-y-2 animate-bounce">
+                                <div class="text-4xl">🏆</div>
+                                <h3 class="font-extrabold text-amber-300 text-base md:text-lg">CHÚC MỪNG! EM ĐÃ TRỞ THÀNH "CHUYÊN GIA ASEAN"</h3>
+                                <p class="text-xs text-slate-300">
+                                    Em đã xuất sắc hoàn thành toàn bộ 12 trạm khám phá bài học Lịch sử 12!
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center pt-3 border-t border-slate-800">
+                        <button onclick="prevPage()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg font-medium text-xs md:text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-arrow-left"></i> Trang trước
+                        </button>
+                        <button onclick="goToPage(1)" class="px-5 py-2 bg-asean-yellow text-slate-900 font-bold rounded-lg text-xs md:text-sm flex items-center gap-2 shadow">
+                            <i class="fa-solid fa-rotate-left"></i> Về trang bìa
+                        </button>
+                    </div>
+                </section>
+
             </div>
         </div>
     </main>
 
-    <!-- FOOTER -->
-    <footer class="max-w-4xl mx-auto w-full text-center my-4 text-slate-500 text-xs">
-        © Thiết kế dành cho tiết học tương tác Lịch sử 12 • Bài 4: ASEAN từ ASEAN 5 đến ASEAN 10
+    <!-- BOTTOM NAVIGATION CONTROLLER BAR -->
+    <footer class="bg-slate-900 border-t border-slate-800 py-3 px-4 text-white z-40">
+        <div class="max-w-4xl mx-auto flex justify-between items-center text-xs md:text-sm">
+            <button onclick="prevPage()" class="px-3.5 py-1.5 bg-slate-800 hover:bg-slate-700 rounded-lg flex items-center gap-1.5 transition font-medium">
+                <i class="fa-solid fa-chevron-left"></i>
+                <span class="hidden sm:inline">TRANG TRƯỚC</span>
+            </button>
+
+            <!-- Page counter indicator -->
+            <div class="font-semibold text-slate-300 bg-slate-800/80 px-4 py-1 rounded-full border border-slate-700">
+                TRANG <span id="current-page-num" class="text-asean-yellow font-bold">1</span> / 12
+            </div>
+
+            <button onclick="nextPage()" class="px-3.5 py-1.5 bg-asean-blue hover:bg-blue-700 rounded-lg flex items-center gap-1.5 transition font-medium text-white">
+                <span class="hidden sm:inline">TRANG SAU</span>
+                <i class="fa-solid fa-chevron-right"></i>
+            </button>
+        </div>
     </footer>
 
-    <!-- QR GENERATOR SCRIPT -->
-    <script>
-        let qrCodeInstance = null;
+    <!-- MODAL: TOC (MỤC LỤC) -->
+    <div id="modal-toc" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-700 text-white rounded-2xl max-w-md w-full p-6 shadow-2xl">
+            <div class="flex justify-between items-center mb-4 border-b border-slate-800 pb-2">
+                <h3 class="font-bold text-amber-400 text-base flex items-center gap-2">
+                    <i class="fa-solid fa-list-ol"></i> MỤC LỤC 12 TRẠM KHÁM PHÁ
+                </h3>
+                <button onclick="closeTocModal()" class="text-slate-400 hover:text-white text-lg">&times;</button>
+            </div>
+            <div class="space-y-1.5 max-h-[350px] overflow-y-auto pr-1 text-xs">
+                <button onclick="goToPage(1); closeTocModal();" class="w-full text-left p-2 rounded-lg hover:bg-slate-800 text-slate-300 flex justify-between">
+                    <span>1. Bìa sách & Khởi động</span> <span class="text-amber-400">Trang 1</span>
+                </button>
+                <button onclick="goToPage(2); closeTocModal();" class="w-full text-left p-2 rounded-lg hover:bg-slate-800 text-slate-300 flex justify-between">
+                    <span>2. Bối cảnh ra đời ASEAN</span> <span class="text-amber-400">Trang 2</span>
+                </button>
+                <button onclick="goToPage(3); closeTocModal();" class="w-full text-left p-2 rounded-lg hover:bg-slate-800 text-slate-300 flex justify-between">
+                    <span>3. ASEAN ra đời (8/8/1967)</span> <span class="text-amber-400">Trang 3</span>
+                </button>
+                <button onclick="goToPage(4); closeTocModal();" class="w-full text-left p-2 rounded-lg hover:bg-slate-800 text-slate-300 flex justify-between">
+                    <span>4. Mục đích thành lập ASEAN</span> <span class="text-amber-400">Trang 4</span>
+                </button>
+                <button onclick="goToPage(5); closeTocModal();" class="w-full text-left p-2 rounded-lg hover:bg-slate-800 text-slate-300 flex justify-between">
+                    <span>5. Bản đồ Hành trình Mở rộng</span> <span class="text-amber-400">Trang 5</span>
+                </button>
+                <button onclick="goToPage(6); closeTocModal();" class="w-full text-left p-2 rounded-lg hover:bg-slate-800 text-slate-300 flex justify-between">
+                    <span>6. Kéo-thả mốc mở rộng</span> <span class="text-amber-400">Trang 6</span>
+                </button>
+                <button onclick="goToPage(7); closeTocModal();" class="w-full text-left p-2 rounded-lg hover:bg-slate-800 text-slate-300 flex justify-between">
+                    <span>7. 4 Giai đoạn phát triển</span> <span class="text-amber-400">Trang 7</span>
+                </button>
+                <button onclick="goToPage(8); closeTocModal();" class="w-full text-left p-2 rounded-lg hover:bg-slate-800 text-slate-300 flex justify-between">
+                    <span>8. Bảo tàng Văn kiện Lịch sử</span> <span class="text-amber-400">Trang 8</span>
+                </button>
+                <button onclick="goToPage(9); closeTocModal();" class="w-full text-left p-2 rounded-lg hover:bg-slate-800 text-slate-300 flex justify-between">
+                    <span>9. Trắc nghiệm Lịch sử</span> <span class="text-amber-400">Trang 9</span>
+                </button>
+                <button onclick="goToPage(10); closeTocModal();" class="w-full text-left p-2 rounded-lg hover:bg-slate-800 text-slate-300 flex justify-between">
+                    <span>10. Sắp xếp Dòng thời gian</span> <span class="text-amber-400">Trang 10</span>
+                </button>
+                <button onclick="goToPage(11); closeTocModal();" class="w-full text-left p-2 rounded-lg hover:bg-slate-800 text-slate-300 flex justify-between">
+                    <span>11. Sơ đồ tư duy (Mindmap)</span> <span class="text-amber-400">Trang 11</span>
+                </button>
+                <button onclick="goToPage(12); closeTocModal();" class="w-full text-left p-2 rounded-lg hover:bg-slate-800 text-slate-300 flex justify-between">
+                    <span>12. Vận dụng & Huy hiệu Chuyên gia</span> <span class="text-amber-400">Trang 12</span>
+                </button>
+            </div>
+        </div>
+    </div>
 
-        function generateQR(url) {
-            const qrContainer = document.getElementById("qrcode");
-            qrContainer.innerHTML = "";
-            qrCodeInstance = new QRCode(qrContainer, {
-                text: url,
-                width: 200,
-                height: 200,
-                colorDark: "#0f172a",
-                colorLight: "#ffffff",
-                correctLevel: QRCode.CorrectLevel.H
+    <!-- MODAL: BADGES (BẢNG HUY HIỆU) -->
+    <div id="modal-badges" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-700 text-white rounded-2xl max-w-lg w-full p-6 shadow-2xl">
+            <div class="flex justify-between items-center mb-4 border-b border-slate-800 pb-2">
+                <h3 class="font-bold text-amber-400 text-base flex items-center gap-2">
+                    <i class="fa-solid fa-medal"></i> BỘ SƯU TẬP 10 HUY HIỆU ASEAN
+                </h3>
+                <button onclick="closeBadgeModal()" class="text-slate-400 hover:text-white text-lg">&times;</button>
+            </div>
+            
+            <div id="badges-grid" class="grid grid-cols-2 gap-2 max-h-[360px] overflow-y-auto pr-1 text-xs">
+                <!-- Badges rendered by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT APPLICATION LOGIC -->
+    <script>
+        let currentPage = 1;
+        const totalPages = 12;
+        let soundEnabled = true;
+
+        // Badge system tracker
+        const badges = [
+            { id: 1, title: '🔑 Người khám phá', desc: 'Bắt đầu hành trình học tập', unlocked: true },
+            { id: 2, title: '🌏 Nhà địa lý ASEAN', desc: 'Giải mã đúng bối cảnh ra đời', unlocked: false },
+            { id: 3, title: '🏛️ Nhà sử học ASEAN', desc: 'Khám phá đủ 5 nước sáng lập', unlocked: false },
+            { id: 4, title: '🤝 Đại sứ hợp tác', desc: 'Mở khóa mục đích ASEAN', unlocked: false },
+            { id: 5, title: '🧩 Người giải mã lịch sử', desc: 'Theo dõi bản đồ mở rộng', unlocked: false },
+            { id: 6, title: '📜 Người lưu giữ ký ức', desc: 'Ghép đúng mốc thời gian', unlocked: false },
+            { id: 7, title: '🎯 Chiến binh kiến thức', desc: 'Mở đủ 4 cửa giai đoạn', unlocked: false },
+            { id: 8, title: '🧠 Nhà phân tích', desc: 'Khám phá bảo tàng văn kiện', unlocked: false },
+            { id: 9, title: '⏳ Người làm chủ thời gian', desc: 'Hoàn thành Quiz & Dòng thời gian', unlocked: false },
+            { id: 10, title: '🏆 Chuyên gia ASEAN', desc: 'Hoàn thành câu hỏi vận dụng cuối', unlocked: false }
+        ];
+
+        /* WEB AUDIO API SOUND SYNTHESIZER */
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioCtx = null;
+
+        function playSound(type) {
+            if (!soundEnabled) return;
+            try {
+                if (!audioCtx) audioCtx = new AudioContext();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                const now = audioCtx.currentTime;
+
+                if (type === 'flip') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(300, now);
+                    osc.frequency.exponentialRampToValueAtTime(150, now + 0.15);
+                    gain.gain.setValueAtTime(0.15, now);
+                    gain.gain.linearRampToValueAtTime(0.01, now + 0.15);
+                    osc.start(now);
+                    osc.stop(now + 0.15);
+                } else if (type === 'correct') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(523.25, now); // C5
+                    osc.frequency.setValueAtTime(659.25, now + 0.1); // E5
+                    osc.frequency.setValueAtTime(783.99, now + 0.2); // G5
+                    gain.gain.setValueAtTime(0.2, now);
+                    gain.gain.linearRampToValueAtTime(0.01, now + 0.35);
+                    osc.start(now);
+                    osc.stop(now + 0.35);
+                } else if (type === 'wrong') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(220, now);
+                    osc.frequency.setValueAtTime(180, now + 0.15);
+                    gain.gain.setValueAtTime(0.2, now);
+                    gain.gain.linearRampToValueAtTime(0.01, now + 0.3);
+                    osc.start(now);
+                    osc.stop(now + 0.3);
+                }
+            } catch (e) {
+                console.log('Audio Context Error:', e);
+            }
+        }
+
+        /* PAGE NAVIGATION ENGINE */
+        function goToPage(page) {
+            if (page < 1 || page > totalPages) return;
+            
+            document.querySelectorAll('.book-page').forEach(el => el.classList.add('hidden'));
+            const targetPage = document.getElementById(`page-${page}`);
+            if (targetPage) targetPage.classList.remove('hidden');
+
+            currentPage = page;
+            document.getElementById('current-page-num').innerText = currentPage;
+
+            // Progress bar calculation
+            const progressPct = Math.round((currentPage / totalPages) * 100);
+            document.getElementById('progress-bar').style.width = `${progressPct}%`;
+            document.getElementById('progress-text').innerText = `${progressPct}%`;
+
+            playSound('flip');
+        }
+
+        function nextPage() {
+            if (currentPage < totalPages) goToPage(currentPage + 1);
+        }
+
+        function prevPage() {
+            if (currentPage > 1) goToPage(currentPage - 1);
+        }
+
+        /* PAGE 2 CHECK */
+        function checkPage2(btn, isCorrect) {
+            const feedback = document.getElementById('page2-feedback');
+            feedback.classList.remove('hidden', 'bg-emerald-50', 'bg-rose-50', 'border-emerald-200', 'border-rose-200', 'text-emerald-900', 'text-rose-900');
+            
+            if (isCorrect) {
+                feedback.classList.add('bg-emerald-50', 'border-emerald-200', 'text-emerald-900');
+                feedback.innerHTML = '<strong> chính xác!</strong> Trong bối cảnh phức tạp của Chiến tranh lạnh, các nước Đông Nam Á đã chủ động hợp tác để tăng cường sức mạnh khu vực, tạo dựng môi trường hòa bình cùng phát triển.';
+                document.getElementById('page2-next').disabled = false;
+                document.getElementById('page2-next').classList.remove('opacity-50', 'cursor-not-allowed');
+                unlockBadge(2);
+                playSound('correct');
+            } else {
+                feedback.classList.add('bg-rose-50', 'border-rose-200', 'text-rose-900');
+                feedback.innerHTML = '<strong> chưa chính xác!</strong> Việc liên minh quân sự hoặc đóng cửa chia rẽ không mang lại môi trường phát triển bền vững cho các quốc gia. Hãy thử chọn lại phương án B!';
+                playSound('wrong');
+            }
+        }
+
+        /* PAGE 3 FOUNDING MEMBERS ENGINE */
+        const memberData = {
+            id: { name: 'In-đô-nê-xi-a', rep: 'Adam Malik (Bộ trưởng Ngoại giao)', capital: 'Gia-các-ta', role: 'Quốc gia vạn đảo, thành viên sáng lập đóng vai trò then chốt.' },
+            my: { name: 'Ma-lai-xi-a', rep: 'Tun Abdul Razak (Phó Thủ tướng)', capital: 'Cua-la Lăm-pơ', role: 'Đề xuất nhiều sáng kiến hợp tác hòa bình tại Đông Nam Á.' },
+            ph: { name: 'Phi-líp-pin', rep: 'Narciso Ramos (Bộ trưởng Ngoại giao)', capital: 'Ma-ni-la', role: 'Nền kinh tế đảo quốc sôi động, tích cực tham gia liên kết.' },
+            sg: { name: 'Xin-ga-po', rep: 'S. Rajaratnam (Bộ trưởng Ngoại giao)', capital: 'Xin-ga-po', role: 'Trung tâm dịch vụ, thương mại và đổi mới hàng đầu khu vực.' },
+            th: { name: 'Thái Lan', rep: 'Thanat Khoman (Bộ trưởng Ngoại giao)', capital: 'Băng Cốc', role: 'Nơi ký kết Tuyên bố ASEAN lịch sử ngày 8/8/1967.' }
+        };
+
+        const clickedFounding = new Set();
+        function clickFoundingMember(code, cardEl) {
+            const data = memberData[code];
+            if (!data) return;
+
+            clickedFounding.add(code);
+            cardEl.classList.add('border-asean-yellow', 'bg-amber-50');
+
+            document.getElementById('founding-detail').innerHTML = `
+                <div class="space-y-1">
+                    <h4 class="font-bold text-amber-300 text-sm">${data.name} (Đại diện: ${data.rep})</h4>
+                    <p>Thủ đô: <strong>${data.capital}</strong> • Vai trò: ${data.role}</p>
+                </div>
+            `;
+            playSound('correct');
+
+            if (clickedFounding.size >= 5) {
+                document.getElementById('page3-next').disabled = false;
+                document.getElementById('page3-next').classList.remove('opacity-50', 'cursor-not-allowed');
+                unlockBadge(3);
+            }
+        }
+
+        /* PAGE 4 CARDS FLIP CHECKER */
+        let flippedCardCount = 0;
+        function checkPage4Cards() {
+            flippedCardCount++;
+            playSound('flip');
+            if (flippedCardCount >= 3) {
+                document.getElementById('page4-next').disabled = false;
+                document.getElementById('page4-next').classList.remove('opacity-50', 'cursor-not-allowed');
+                unlockBadge(4);
+            }
+        }
+
+        /* PAGE 5 SVG MAP TIMELINE ANIMATOR */
+        const mapTimelineSteps = [
+            { year: '1967', label: 'ASEAN 5 (Sáng lập)', countries: ['th', 'id', 'my', 'sg', 'ph'], desc: 'Ngày 8/8/1967: ASEAN ra đời với 5 thành viên sáng lập.' },
+            { year: '1984', label: 'ASEAN 6', countries: ['th', 'id', 'my', 'sg', 'ph', 'bn'], desc: 'Năm 1984: Brunei Darussalam chính thức gia nhập ASEAN.' },
+            { year: '1995', label: 'ASEAN 7', countries: ['th', 'id', 'my', 'sg', 'ph', 'bn', 'vn'], desc: 'Ngày 28/7/1995: Việt Nam kết nạp, mở ra bước ngoặt mới.' },
+            { year: '1997', label: 'ASEAN 9', countries: ['th', 'id', 'my', 'sg', 'ph', 'bn', 'vn', 'la', 'mm'], desc: 'Năm 1997: Lào và Myanmar cùng gia nhập ASEAN.' },
+            { year: '1999', label: 'ASEAN 10', countries: ['th', 'id', 'my', 'sg', 'ph', 'bn', 'vn', 'la', 'mm', 'kh'], desc: 'Năm 1999: Campuchia gia nhập, hoàn thành mục tiêu ASEAN 10!' }
+        ];
+
+        let currentMapStep = 0;
+        let mapInterval = null;
+
+        function renderMapStep(stepIndex) {
+            const step = mapTimelineSteps[stepIndex];
+            document.getElementById('map-status-year').innerText = `Năm: ${step.year}`;
+            document.getElementById('map-status-label').innerText = step.label;
+            document.getElementById('map-milestone-popup').innerHTML = step.desc;
+
+            // Reset all country fill styles
+            const allCountries = ['mm', 'th', 'la', 'vn', 'kh', 'my', 'sg', 'bn', 'ph', 'id'];
+            allCountries.forEach(code => {
+                const el = document.getElementById(`country-${code}`);
+                if (el) {
+                    el.setAttribute('fill', '#334155');
+                    el.setAttribute('fill-opacity', '0.3');
+                    el.classList.remove('active-country');
+                }
+            });
+
+            // Active step countries highlight
+            step.countries.forEach(code => {
+                const el = document.getElementById(`country-${code}`);
+                if (el) {
+                    el.setAttribute('fill', '#003399');
+                    el.setAttribute('fill-opacity', '0.85');
+                    el.classList.add('active-country');
+                }
             });
         }
 
-        function updateQRCode() {
-            let inputUrl = document.getElementById("target-url").value.trim();
-            if (!inputUrl) {
-                inputUrl = "bai4lop12.html";
-                document.getElementById("target-url").value = inputUrl;
+        function toggleMapTimeline() {
+            if (mapInterval) {
+                clearInterval(mapInterval);
+                mapInterval = null;
+                document.getElementById('play-text').innerText = 'CHẠY HÀNH TRÌNH';
+            } else {
+                document.getElementById('play-text').innerText = 'TẠM DỪNG';
+                mapInterval = setInterval(() => {
+                    currentMapStep = (currentMapStep + 1) % mapTimelineSteps.length;
+                    renderMapStep(currentMapStep);
+                    playSound('flip');
+
+                    if (currentMapStep === mapTimelineSteps.length - 1) {
+                        clearInterval(mapInterval);
+                        mapInterval = null;
+                        document.getElementById('play-text').innerText = 'CHẠY HÀNH TRÌNH';
+                        document.getElementById('page5-next').disabled = false;
+                        document.getElementById('page5-next').classList.remove('opacity-50', 'cursor-not-allowed');
+                        unlockBadge(5);
+                    }
+                }, 2200);
             }
-            document.getElementById("direct-link").href = inputUrl;
-            generateQR(inputUrl);
         }
 
-        // Initialize QR Code on page load
-        window.addEventListener("DOMContentLoaded", () => {
-            const initialUrl = window.location.href.replace(/index\.html$/, "") + "bai4lop12.html";
-            document.getElementById("target-url").value = initialUrl;
-            document.getElementById("direct-link").href = initialUrl;
-            generateQR(initialUrl);
+        function resetMapTimeline() {
+            if (mapInterval) {
+                clearInterval(mapInterval);
+                mapInterval = null;
+            }
+            currentMapStep = 0;
+            renderMapStep(0);
+            document.getElementById('play-text').innerText = 'CHẠY HÀNH TRÌNH';
+        }
+
+        function clickCountry(code) {
+            playSound('correct');
+            // Quick country highlight action
+        }
+
+        /* PAGE 6 MATCHING GAME ENGINE */
+        let selectedDragId = null;
+        let matchedPairsCount = 0;
+
+        function selectMatchItem(type, id, targetId = null) {
+            if (type === 'drag') {
+                document.querySelectorAll('.match-item').forEach(el => el.classList.remove('border-amber-400', 'bg-amber-50'));
+                selectedDragId = id;
+                const activeEl = document.getElementById(`drag-item-${id}`);
+                if (activeEl) activeEl.classList.add('border-amber-400', 'bg-amber-50');
+                playSound('flip');
+            } else if (type === 'drop') {
+                if (!selectedDragId) return;
+
+                if (selectedDragId === targetId) {
+                    const dragEl = document.getElementById(`drag-item-${selectedDragId}`);
+                    const slotEl = document.getElementById(`drop-slot-${id}`);
+                    
+                    slotEl.querySelector('.slot-content').innerHTML = `<span class="font-bold text-emerald-700">${dragEl.innerText}</span>`;
+                    slotEl.classList.add('bg-emerald-50', 'border-emerald-400');
+                    dragEl.style.display = 'none';
+                    selectedDragId = null;
+
+                    matchedPairsCount++;
+                    playSound('correct');
+
+                    if (matchedPairsCount >= 5) {
+                        const res = document.getElementById('page6-result');
+                        res.classList.remove('hidden');
+                        res.classList.add('bg-emerald-100', 'text-emerald-900');
+                        res.innerText = '🎉 TỰ HÀO! Em đã hoàn thành xuất sắc thử thách mốc thời gian mở rộng!';
+                        
+                        document.getElementById('page6-next').disabled = false;
+                        document.getElementById('page6-next').classList.remove('opacity-50', 'cursor-not-allowed');
+                        unlockBadge(6);
+                    }
+                } else {
+                    playSound('wrong');
+                }
+            }
+        }
+
+        function resetMatchingGame() {
+            matchedPairsCount = 0;
+            selectedDragId = null;
+            for (let i = 1; i <= 5; i++) {
+                const el = document.getElementById(`drag-item-${i}`);
+                if (el) el.style.display = 'block';
+            }
+            document.querySelectorAll('.dropzone').forEach(slot => {
+                slot.classList.remove('bg-emerald-50', 'border-emerald-400');
+                slot.querySelector('.slot-content').innerHTML = 'Thả vào đây...';
+            });
+            document.getElementById('page6-result').classList.add('hidden');
+        }
+
+        /* PAGE 7 DOORS TOGGLE ENGINE */
+        const openedDoors = new Set();
+        function toggleDoor(container, stageId) {
+            container.classList.toggle('open');
+            openedDoors.add(stageId);
+            playSound('flip');
+
+            if (openedDoors.size >= 4) {
+                document.getElementById('page7-next').disabled = false;
+                document.getElementById('page7-next').classList.remove('opacity-50', 'cursor-not-allowed');
+                unlockBadge(7);
+            }
+        }
+
+        /* PAGE 8 MUSEUM DISPLAY ENGINE */
+        function openDocMuseum(title, name, detail) {
+            const display = document.getElementById('museum-display');
+            display.innerHTML = `
+                <div class="space-y-1">
+                    <h4 class="font-bold text-amber-300 text-sm">📜 ${title}: ${name}</h4>
+                    <p class="text-slate-300">${detail}</p>
+                </div>
+            `;
+            playSound('correct');
+
+            document.getElementById('page8-next').disabled = false;
+            document.getElementById('page8-next').classList.remove('opacity-50', 'cursor-not-allowed');
+            unlockBadge(8);
+        }
+
+        /* PAGE 9 QUIZ ENGINE */
+        const quizQuestions = [
+            { q: '1. ASEAN được thành lập vào ngày tháng năm nào?', options: ['8/8/1967', '28/7/1995', '8/8/1977', '30/4/1999'], answer: 0, exp: 'Đúng! Ngày 8/8/1967, Tuyên bố ASEAN (Tuyên bố Băng Cốc) được ký kết.' },
+            { q: '2. Quốc gia thứ 7 gia nhập ASEAN năm 1995 là nước nào?', options: ['Lào', 'Việt Nam', 'Campuchia', 'Brunei'], answer: 1, exp: 'Đúng! Việt Nam chính thức trở thành thành viên thứ 7 vào ngày 28/7/1995.' },
+            { q: '3. Sự kiện đánh dấu sự hoàn thành ý tưởng về một ASEAN gồm 10 quốc gia Đông Nam Á?', options: ['Kết nạp Brunei (1984)', 'Ký Hiến chương ASEAN (2007)', 'Kết nạp Campuchia (1999)', 'Thành lập Cộng đồng ASEAN (2015)'], answer: 2, exp: 'Đúng! Năm 1999 Campuchia gia nhập, hoàn thành mục tiêu ASEAN 10.' },
+            { q: '4. Hiệp ước Thân thiện và Hợp tác ở Đông Nam Á (TAC) được ký tại đâu?', options: ['Băng Cốc (Thái Lan)', 'Ma-ni-la (Phi-líp-pin)', 'Gia-các-ta (In-đô-nê-xi-a)', 'Ba-li (In-đô-nê-xi-a)'], answer: 3, exp: 'Đúng! Hiệp ước TAC được ký tại Bali (Indonesia) năm 1976.' },
+            { q: '5. Cộng đồng ASEAN chính thức được thành lập vào mốc thời gian nào?', options: ['31/12/2015', '08/08/2007', '01/01/2020', '28/07/1995'], answer: 0, exp: 'Đúng! Tuyên bố thành lập Cộng đồng ASEAN chính thức có hiệu lực từ 31/12/2015.' }
+        ];
+
+        let currentQuizIndex = 0;
+
+        function renderQuizQuestion(index) {
+            const data = quizQuestions[index];
+            document.getElementById('quiz-progress-num').innerText = `Câu ${index + 1}/5`;
+            document.getElementById('quiz-question').innerText = data.q;
+            
+            const optionsBox = document.getElementById('quiz-options');
+            optionsBox.innerHTML = '';
+
+            data.options.forEach((optText, optIdx) => {
+                const btn = document.createElement('button');
+                btn.className = 'w-full text-left p-3 rounded-xl border border-slate-200 hover:border-slate-400 hover:bg-slate-50 transition text-xs md:text-sm font-medium';
+                btn.innerText = `${String.fromCharCode(65 + optIdx)}. ${optText}`;
+                btn.onclick = () => handleQuizAnswer(optIdx, data.answer, data.exp);
+                optionsBox.appendChild(btn);
+            });
+
+            document.getElementById('quiz-explanation').classList.add('hidden');
+        }
+
+        function handleQuizAnswer(selected, correct, exp) {
+            const expBox = document.getElementById('quiz-explanation');
+            expBox.classList.remove('hidden', 'bg-emerald-50', 'border-emerald-200', 'text-emerald-900', 'bg-rose-50', 'border-rose-200', 'text-rose-900');
+
+            if (selected === correct) {
+                expBox.classList.add('bg-emerald-50', 'border-emerald-200', 'text-emerald-900');
+                expBox.innerHTML = `<strong>Chính xác!</strong> ${exp}`;
+                playSound('correct');
+
+                setTimeout(() => {
+                    if (currentQuizIndex < quizQuestions.length - 1) {
+                        currentQuizIndex++;
+                        renderQuizQuestion(currentQuizIndex);
+                    } else {
+                        document.getElementById('page9-next').disabled = false;
+                        document.getElementById('page9-next').classList.remove('opacity-50', 'cursor-not-allowed');
+                        unlockBadge(9);
+                    }
+                }, 1500);
+            } else {
+                expBox.classList.add('bg-rose-50', 'border-rose-200', 'text-rose-900');
+                expBox.innerHTML = '<strong>Chưa chính xác!</strong> Hãy suy nghĩ kĩ và thử chọn lại đáp án đúng nhé!';
+                playSound('wrong');
+            }
+        }
+
+        /* PAGE 10 TIMELINE REORDER GAME */
+        const timelineItemsData = [
+            { id: 1, text: '1. Thành lập ASEAN 5 tại Băng Cốc (1967)' },
+            { id: 2, text: '2. Ký Hiệp ước TAC tại Bali (1976)' },
+            { id: 3, text: '3. Việt Nam gia nhập ASEAN (1995)' },
+            { id: 4, text: '4. Kết nạp Campuchia - Đạt ASEAN 10 (1999)' },
+            { id: 5, text: '5. Chính thức thành lập Cộng đồng ASEAN (2015)' }
+        ];
+
+        let userTimelineOrder = [];
+
+        function initTimelineGame() {
+            const pool = document.getElementById('timeline-pool');
+            const slots = document.getElementById('timeline-slots');
+            pool.innerHTML = '';
+            slots.innerHTML = '';
+            userTimelineOrder = [];
+
+            // Shuffle pool items
+            const shuffled = [...timelineItemsData].sort(() => Math.random() - 0.5);
+
+            shuffled.forEach(item => {
+                const btn = document.createElement('button');
+                btn.id = `timeline-btn-${item.id}`;
+                btn.className = 'px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs font-medium hover:border-asean-blue shadow-sm transition';
+                btn.innerText = item.text;
+                btn.onclick = () => addTimelineItem(item);
+                pool.appendChild(btn);
+            });
+
+            for (let i = 1; i <= 5; i++) {
+                const slot = document.createElement('div');
+                slot.id = `timeline-slot-${i}`;
+                slot.className = 'p-2 rounded-lg border border-dashed border-slate-300 bg-slate-50 text-xs text-slate-400 italic flex items-center min-h-[38px]';
+                slot.innerText = `Vị trí ${i}...`;
+                slots.appendChild(slot);
+            }
+        }
+
+        function addTimelineItem(item) {
+            if (userTimelineOrder.length >= 5) return;
+
+            userTimelineOrder.push(item);
+            const slotIndex = userTimelineOrder.length;
+            const slot = document.getElementById(`timeline-slot-${slotIndex}`);
+            slot.innerHTML = `<span class="font-bold text-asean-blue">${item.text}</span>`;
+            slot.classList.remove('italic', 'text-slate-400');
+            slot.classList.add('bg-blue-50', 'border-blue-200');
+
+            document.getElementById(`timeline-btn-${item.id}`).style.display = 'none';
+            playSound('flip');
+
+            if (userTimelineOrder.length === 5) {
+                checkTimelineResult();
+            }
+        }
+
+        function checkTimelineResult() {
+            const isCorrect = userTimelineOrder.every((item, idx) => item.id === idx + 1);
+            const res = document.getElementById('timeline-result');
+            res.classList.remove('hidden', 'bg-emerald-100', 'text-emerald-900', 'bg-rose-100', 'text-rose-900');
+
+            if (isCorrect) {
+                res.classList.add('bg-emerald-100', 'text-emerald-900');
+                res.innerText = '🎯 CHÍNH XÁC! Em đã sắp xếp chuẩn xác dòng thời gian lịch sử phát triển của ASEAN!';
+                document.getElementById('page10-next').disabled = false;
+                document.getElementById('page10-next').classList.remove('opacity-50', 'cursor-not-allowed');
+                playSound('correct');
+            } else {
+                res.classList.add('bg-rose-100', 'text-rose-900');
+                res.innerText = '❌ Chưa chuẩn xác! Hãy bấm "Đặt lại" để thử sắp xếp lại từ đầu nhé!';
+                playSound('wrong');
+            }
+        }
+
+        function resetTimelineGame() {
+            document.getElementById('timeline-result').classList.add('hidden');
+            initTimelineGame();
+        }
+
+        /* PAGE 11 MINDMAP ENGINE */
+        const mindmapData = {
+            b1: { title: '1. SỰ RA ĐỜI ASEAN', desc: 'Thành lập ngày 8/8/1967 tại Băng Cốc (Thái Lan) với 5 nước sáng lập: Indonesia, Malaysia, Philippines, Singapore, Thái Lan.' },
+            b2: { title: '2. MỤC ĐÍCH TỔNG QUÁT', desc: 'Thúc đẩy tăng trưởng kinh tế, tiến bộ xã hội, phát triển văn hóa và giữ vững hòa bình, ổn định an ninh khu vực.' },
+            b3: { title: '3. QUÁ TRÌNH MỞ RỘNG', desc: 'Từ ASEAN 5 phát triển thành ASEAN 10: Brunei (1984), Việt Nam (1995), Lào & Myanmar (1997), Campuchia (1999).' },
+            b4: { title: '4. CÁC GIAI ĐOẠN PHÁT TRIỂN', desc: 'Trải qua 4 giai đoạn: Đặt nền móng (1967-1976), Mở rộng hợp tác (1976-1999), Hoàn thiện thể chế (1999-2015) và Cộng đồng ASEAN (2015-nay).' },
+            b5: { title: '5. CỘNG ĐỒNG ASEAN', desc: 'Hình thành 31/12/2015 dựa trên 3 trụ cột: Cộng đồng Chính trị - An ninh (APSC), Kinh tế (AEC) và Văn hóa - Xã hội (ASCC).' }
+        };
+
+        const clickedMindmap = new Set();
+        function showMindmapDetail(branchKey) {
+            const data = mindmapData[branchKey];
+            if (!data) return;
+
+            clickedMindmap.add(branchKey);
+            document.getElementById('mindmap-detail').innerHTML = `
+                <div class="space-y-1">
+                    <h4 class="font-bold text-amber-300 text-sm">${data.title}</h4>
+                    <p class="text-slate-200">${data.desc}</p>
+                </div>
+            `;
+            playSound('correct');
+
+            if (clickedMindmap.size >= 3) {
+                document.getElementById('page11-next').disabled = false;
+                document.getElementById('page11-next').classList.remove('opacity-50', 'cursor-not-allowed');
+            }
+        }
+
+        /* PAGE 12 REFLECTION REFLECTION */
+        function submitReflection() {
+            const text = document.getElementById('reflection-text').value.trim();
+            if (text.length < 5) {
+                alert('Em hãy viết câu trả lời lý giải ngắn gọn trước khi gửi nhé!');
+                return;
+            }
+
+            document.getElementById('reflection-guide').classList.remove('hidden');
+            document.getElementById('final-master-card').classList.remove('hidden');
+            unlockBadge(10);
+            playSound('correct');
+        }
+
+        /* BADGES MANAGEMENT MODAL */
+        function renderBadgesGrid() {
+            const grid = document.getElementById('badges-grid');
+            grid.innerHTML = '';
+
+            let unlockedCount = 0;
+            badges.forEach(b => {
+                if (b.unlocked) unlockedCount++;
+
+                const card = document.createElement('div');
+                card.className = `p-3 rounded-xl border flex flex-col justify-between ${
+                    b.unlocked 
+                        ? 'bg-amber-500/20 border-amber-400 text-amber-200' 
+                        : 'bg-slate-800 border-slate-700 text-slate-500 opacity-60'
+                }`;
+
+                card.innerHTML = `
+                    <div>
+                        <h5 class="font-bold text-xs ${b.unlocked ? 'text-amber-300' : 'text-slate-400'}">${b.title}</h5>
+                        <p class="text-[10px] mt-1 leading-snug">${b.desc}</p>
+                    </div>
+                    <span class="text-[9px] font-semibold mt-2 px-1.5 py-0.5 rounded ${b.unlocked ? 'bg-amber-400 text-slate-900' : 'bg-slate-700 text-slate-400'} self-start">
+                        ${b.unlocked ? 'ĐÃ ĐẠT' : 'KHÓA'}
+                    </span>
+                `;
+                grid.appendChild(card);
+            });
+
+            document.getElementById('badge-count').innerText = `${unlockedCount}/10`;
+        }
+
+        function unlockBadge(badgeId) {
+            const b = badges.find(item => item.id === badgeId);
+            if (b && !b.unlocked) {
+                b.unlocked = true;
+                renderBadgesGrid();
+            }
+        }
+
+        function openBadgeModal() {
+            renderBadgesGrid();
+            document.getElementById('modal-badges').classList.remove('hidden');
+        }
+
+        function closeBadgeModal() {
+            document.getElementById('modal-badges').classList.add('hidden');
+        }
+
+        /* TOC MODAL CONTROL */
+        function openTocModal() {
+            document.getElementById('modal-toc').classList.remove('hidden');
+        }
+
+        function closeTocModal() {
+            document.getElementById('modal-toc').classList.add('hidden');
+        }
+
+        /* SOUND TOGGLE */
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            const icon = document.getElementById('sound-icon');
+            if (soundEnabled) {
+                icon.className = 'fa-solid fa-volume-high text-sm text-green-400';
+            } else {
+                icon.className = 'fa-solid fa-volume-xmark text-sm text-rose-400';
+            }
+        }
+
+        /* FULLSCREEN TOGGLE */
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.log(`Error attempting to enable fullscreen: ${err.message}`);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
+
+        /* INITIALIZATION */
+        window.addEventListener('DOMContentLoaded', () => {
+            renderMapStep(0);
+            renderQuizQuestion(0);
+            initTimelineGame();
+            renderBadgesGrid();
         });
     </script>
 </body>
