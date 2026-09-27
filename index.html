@@ -342,10 +342,10 @@
             const modal = document.getElementById('qrModal');
             if (event.target == modal) {
                 closeQR();
-            }
+            }</script>
 
-            <!-- BANNER POPUP YÊU CẦU NHẬP THÔNG TIN HỌC SINH -->
-<div id="studentModal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 99999; font-family: sans-serif;">
+<!-- BANNER POPUP YÊU CẦU NHẬP THÔNG TIN HỌC SINH -->
+<div id="studentModal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: flex; align-items: center; justify-content: center; z-index: 999999; font-family: sans-serif;">
     <div style="background: #ffffff; padding: 25px; border-radius: 12px; width: 90%; max-width: 360px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); text-align: center;">
         <h3 style="margin: 0 0 10px 0; color: #1e3a8a;">THÔNG TIN HỌC SINH</h3>
         <p style="margin: 0 0 15px 0; color: #64748b; font-size: 13px;">Vui lòng nhập Họ tên và Lớp để bắt đầu bài học</p>
@@ -373,10 +373,6 @@
 </div>
 
 <script>
-    window.addEventListener('DOMContentLoaded', function() {
-        checkSavedStudentInfo();
-    });
-
     function checkSavedStudentInfo() {
         const savedName = localStorage.getItem('asean_student_name');
         const savedClass = localStorage.getItem('asean_student_class');
@@ -413,8 +409,12 @@
             checkSavedStudentInfo();
         }
     }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', checkSavedStudentInfo);
+    } else {
+        checkSavedStudentInfo();
+    }
 </script>
-        }
-    </script>
-</body>
-</html>
+
+   
