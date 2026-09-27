@@ -388,7 +388,7 @@
         }
     }
 
-    function confirmStudentInfo() {
+  function confirmStudentInfo() {
         const name = document.getElementById('txtName').value.trim();
         const cls = document.getElementById('txtClass').value.trim();
 
@@ -397,11 +397,26 @@
             return;
         }
 
+        // Lưu thông tin vào trình duyệt của học sinh
         localStorage.setItem('asean_student_name', name);
         localStorage.setItem('asean_student_class', cls);
+
+        // ĐƯỜNG LINK GOOGLE FORM NHẬN PHẢN HỒI
+        const formUrl = "https://docs.google.com/forms/d/e/1jua1NzSy8s4irDzGNhsbMacKeB0qo6q_yrHRPxXGmHI/formResponse";
+        
+        const formData = new FormData();
+        formData.append('entry.1', name); 
+        formData.append('entry.2', cls);
+
+        // Gửi ngầm dữ liệu lên Google Sheets
+        fetch(formUrl, {
+            method: 'POST',
+            mode: 'no-cors',
+            body: formData
+        }).catch(err => console.log(err));
+
         checkSavedStudentInfo();
     }
-
     function clearStudentInfo() {
         if (confirm('Bạn có muốn nhập lại Họ tên và Lớp khác không?')) {
             localStorage.removeItem('asean_student_name');
