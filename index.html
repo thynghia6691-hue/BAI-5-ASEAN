@@ -343,6 +343,77 @@
             if (event.target == modal) {
                 closeQR();
             }
+
+            <!-- BANNER POPUP YÊU CẦU NHẬP THÔNG TIN HỌC SINH -->
+<div id="studentModal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 99999; font-family: sans-serif;">
+    <div style="background: #ffffff; padding: 25px; border-radius: 12px; width: 90%; max-width: 360px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); text-align: center;">
+        <h3 style="margin: 0 0 10px 0; color: #1e3a8a;">THÔNG TIN HỌC SINH</h3>
+        <p style="margin: 0 0 15px 0; color: #64748b; font-size: 13px;">Vui lòng nhập Họ tên và Lớp để bắt đầu bài học</p>
+        
+        <div style="text-align: left; margin-bottom: 12px;">
+            <label style="display: block; font-size: 13px; font-weight: bold; color: #334155; margin-bottom: 4px;">Họ và tên:</label>
+            <input type="text" id="txtName" placeholder="Ví dụ: Nguyễn Văn A" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; outline: none;">
+        </div>
+
+        <div style="text-align: left; margin-bottom: 18px;">
+            <label style="display: block; font-size: 13px; font-weight: bold; color: #334155; margin-bottom: 4px;">Lớp:</label>
+            <input type="text" id="txtClass" placeholder="Ví dụ: 12A1" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; outline: none;">
+        </div>
+
+        <button onclick="confirmStudentInfo()" style="width: 100%; background: #2563eb; color: white; border: none; padding: 11px; border-radius: 6px; font-size: 15px; font-weight: bold; cursor: pointer;">
+            BẮT ĐẦU HỌC BÀI
+        </button>
+    </div>
+</div>
+
+<!-- THANH HIỂN THỊ TÊN HỌC SINH ĐÃ NHẬP -->
+<div id="studentBar" style="display: none; background: #e2e8f0; padding: 6px 15px; font-size: 13px; color: #1e293b; text-align: right;">
+    Học sinh: <strong id="lblStudentName" style="color: #1e3a8a;"></strong> - Lớp: <strong id="lblStudentClass" style="color: #1e3a8a;"></strong>
+    <button onclick="clearStudentInfo()" style="margin-left: 8px; background: white; border: 1px solid #94a3b8; padding: 2px 6px; border-radius: 4px; font-size: 11px; cursor: pointer;">Đổi tên</button>
+</div>
+
+<script>
+    window.addEventListener('DOMContentLoaded', function() {
+        checkSavedStudentInfo();
+    });
+
+    function checkSavedStudentInfo() {
+        const savedName = localStorage.getItem('asean_student_name');
+        const savedClass = localStorage.getItem('asean_student_class');
+
+        if (savedName && savedClass) {
+            document.getElementById('studentModal').style.display = 'none';
+            document.getElementById('studentBar').style.display = 'block';
+            document.getElementById('lblStudentName').innerText = savedName;
+            document.getElementById('lblStudentClass').innerText = savedClass;
+        } else {
+            document.getElementById('studentModal').style.display = 'flex';
+            document.getElementById('studentBar').style.display = 'none';
+        }
+    }
+
+    function confirmStudentInfo() {
+        const name = document.getElementById('txtName').value.trim();
+        const cls = document.getElementById('txtClass').value.trim();
+
+        if (!name || !cls) {
+            alert('Vui lòng nhập đầy đủ Họ tên và Lớp!');
+            return;
+        }
+
+        localStorage.setItem('asean_student_name', name);
+        localStorage.setItem('asean_student_class', cls);
+        checkSavedStudentInfo();
+    }
+
+    function clearStudentInfo() {
+        if (confirm('Bạn có muốn nhập lại Họ tên và Lớp khác không?')) {
+            localStorage.removeItem('asean_student_name');
+            localStorage.removeItem('asean_student_class');
+            checkSavedStudentInfo();
+        }
+    }
+</script>
         }
     </script>
 </body>
