@@ -430,6 +430,30 @@
     } else {
         checkSavedStudentInfo();
     }
-</script>
 
+    function guiThongTinLenGoogleSheets(hoTen, lop, baiHoc, tienDo) {
+    var urlWebApps = "https://script.google.com/macros/s/AKfycbxfkUgxD8lal1yaaKgwxQ3nKZ2G-4oQWtUnZnIh6rBdBsCDJv4NWTbBSZdtBth5MEPz/exec";
+    
+    var data = {
+        hoTen: hoTen,
+        lop: lop,
+        baiHoc: baiHoc,
+        tienDo: tienDo
+    };
+
+    fetch(urlWebApps, {
+        method: "POST",
+        mode: "no-cors",
+        cache: "no-cache",
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    })
+    .then(() => {
+        console.log("Đã gửi dữ liệu thành công!");
+    })
+    .catch((error) => {
+        console.error("Lỗi:", error);
+    });
+}
+</script>
    
