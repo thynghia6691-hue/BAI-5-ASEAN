@@ -1735,33 +1735,32 @@
     </script>
 </body>
 <script>
-    // Tự động gửi kết quả hoàn thành bài học về Google Sheets khi học sinh bấm nút
-    document.addEventListener("DOMContentLoaded", function() {
-        var urlWebApps = "https://script.google.com/macros/s/AKfycbxfkUgxD8lal1yaaKgwxQ3nKZ2G-4oQWtUnZnIh6rBdBsCDJv4NWTbBSZdtBth5MEPz/exec";
-        
-        // Lấy tên và lớp học sinh đã lưu từ trang chủ
-        var hoTen = localStorage.getItem('asean_student_name') || "Học sinh ẩn danh";
-        var lop = localStorage.getItem('asean_student_class') || "Chưa rõ lớp";
-        
-        var data = {
-            hoTen: hoTen,
-            lop: lop,
-            baiHoc: "Bài 4",
-            tienDo: "Đã hoàn thành"
-        };
+    // Chỉ gửi kết quả về Google Sheets khi học sinh bấm nút hoàn thành/gửi câu trả lời cuối bài
+    document.addEventListener("click", function(event) {
+        var target = event.target;
+        if (target && target.innerText && target.innerText.includes("GỬI CÂU TRẢ LỜI")) {
+            var urlWebApps = "https://script.google.com/macros/s/AKfycbxfkUgxD8lal1yaaKgwxQ3nKZ2G-4oQWtUnZnIh6rBdBsCDJv4NWTbBSZdtBth5MEPz/exec";
+            var hoTen = localStorage.getItem('asean_student_name') || "Học sinh ẩn danh";
+            var lop = localStorage.getItem('asean_student_class') || "Chưa rõ lớp";
+            
+            var data = {
+                hoTen: hoTen,
+                lop: lop,
+                baiHoc: "Bài 4",
+                tienDo: "Đã hoàn thành"
+            };
 
-        // Gửi dữ liệu ngầm lên Google Sheets
-        fetch(urlWebApps, {
-            method: "POST",
-            mode: "no-cors",
-            cache: "no-cache",
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-        }).then(() => {
-            console.log("Đã gửi kết quả Bài 4 thành công!");
-        }).catch((error) => {
-            console.error("Lỗi:", error);
-        });
+            fetch(urlWebApps, {
+                method: "POST",
+                mode: "no-cors",
+                cache: "no-cache",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            }).then(() => {
+                console.log("Đã gửi kết quả Bài 4 thành công!");
+            }).catch((error) => {
+                console.error("Lỗi:", error);
+            });
+        }
     });
 </script>
-</html>
