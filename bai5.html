@@ -1282,4 +1282,30 @@
         });
     </script>
 </body>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var urlWebApps = "https://script.google.com/macros/s/AKfycbxfkUgxD8lal1yaaKgwxQ3nKZ2G-4oQWtUnZnIh6rBdBsCDJv4NWTbBSZdtBth5MEPz/exec";
+        var hoTen = localStorage.getItem('asean_student_name') || "Học sinh ẩn danh";
+        var lop = localStorage.getItem('asean_student_class') || "Chưa rõ lớp";
+        
+        var data = {
+            hoTen: hoTen,
+            lop: lop,
+            baiHoc: "Bài 5",
+            tienDo: "Đã hoàn thành"
+        };
+
+        fetch(urlWebApps, {
+            method: "POST",
+            mode: "no-cors",
+            cache: "no-cache",
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        }).then(() => {
+            console.log("Đã gửi kết quả Bài 5 thành công!");
+        }).catch((error) => {
+            console.error("Lỗi:", error);
+        });
+    });
+</script>
 </html>
